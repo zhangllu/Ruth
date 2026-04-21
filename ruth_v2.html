@@ -440,6 +440,172 @@
     font-size: 13px;
   }
 
+  /* 其他智者 */
+  .home-more-section {
+    padding: 28px 20px 0;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+  .section-label {
+    font-size: 12px;
+    color: var(--text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 14px;
+  }
+  .building-card {
+    background: var(--surface);
+    border: 1px dashed var(--building);
+    border-radius: 12px;
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+  }
+  .building-info { display: flex; align-items: center; gap: 10px; }
+  .building-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--surface-alt);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-tertiary);
+  }
+  .building-name { font-size: 14px; font-weight: 500; color: var(--text-secondary); }
+  .building-field { font-size: 12px; color: var(--text-tertiary); }
+  .building-badge {
+    font-size: 11px;
+    color: var(--text-tertiary);
+    background: var(--surface-alt);
+    padding: 3px 8px;
+    border-radius: 20px;
+  }
+  .home-invite {
+    margin: 16px 20px 0;
+    max-width: 440px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 14px 16px;
+    background: var(--accent-light);
+    border-radius: 10px;
+    font-size: 13px;
+    color: var(--accent);
+    cursor: pointer;
+    text-align: center;
+    transition: opacity 0.15s;
+  }
+  .home-invite:hover { opacity: 0.85; }
+  .home-bottom {
+    text-align: center;
+    padding: 32px 20px 40px;
+    max-width: 480px;
+    margin: 32px auto 0;
+    border-top: 1px solid var(--border);
+  }
+  .home-bottom p { font-size: 13px; color: var(--text-tertiary); }
+  .home-bottom strong { color: var(--accent); }
+
+  /* Profile */
+  .profile-hero { padding: 20px 0 24px; }
+  .profile-avatar-row { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
+  .profile-avatar {
+    width: 64px; height: 64px; border-radius: 50%;
+    background: var(--accent-light);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 26px; color: var(--accent); font-weight: 700; flex-shrink: 0;
+  }
+  .profile-name { font-size: 24px; font-weight: 700; margin-bottom: 4px; }
+  .profile-identity { font-size: 14px; color: var(--text-secondary); }
+  .profile-section-title {
+    font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em;
+    color: var(--text-tertiary); font-weight: 600; margin-bottom: 12px;
+  }
+  .profile-intro { font-size: 14px; color: var(--text-primary); line-height: 1.8; margin-bottom: 20px; }
+  .profile-quote-item {
+    padding: 14px 16px; border-left: 3px solid var(--accent-light);
+    margin-bottom: 12px; font-size: 14px; line-height: 1.7;
+    color: var(--text-primary); font-style: italic;
+  }
+  .concept-item {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 10px; padding: 14px 16px; margin-bottom: 8px;
+  }
+  .concept-title { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+  .concept-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.6; }
+  .book-item {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 14px; background: var(--surface); border: 1px solid var(--border);
+    border-radius: 10px; margin-bottom: 8px; cursor: pointer; transition: border-color 0.15s;
+  }
+  .book-item:hover { border-color: var(--accent); }
+  .book-title { font-size: 14px; font-weight: 500; }
+  .book-desc { font-size: 12px; color: var(--text-tertiary); margin-top: 2px; }
+  .book-arrow { color: var(--text-tertiary); font-size: 14px; }
+  .limitation-box {
+    background: var(--surface-alt); border-radius: 10px; padding: 14px 16px;
+    font-size: 13px; color: var(--text-secondary); line-height: 1.7; margin-bottom: 24px;
+  }
+  .question-list { margin-bottom: 24px; }
+  .question-item {
+    padding: 12px 14px; border-bottom: 1px solid var(--border);
+    font-size: 14px; color: var(--text-secondary); line-height: 1.6;
+    cursor: pointer; transition: color 0.15s;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .question-item:hover { color: var(--accent); }
+  .question-item:last-child { border-bottom: none; }
+  .question-arrow { color: var(--text-tertiary); font-size: 13px; flex-shrink: 0; margin-left: 8px; }
+  .profile-cta { padding: 0 0 40px; display: flex; flex-direction: column; gap: 10px; }
+
+  /* Blog */
+  .blog-intro {
+    background: var(--surface); border-radius: 12px; padding: 16px; margin-bottom: 20px;
+    font-size: 13px; color: var(--text-secondary); line-height: 1.7; border-left: 3px solid var(--accent);
+  }
+  .blog-card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
+    padding: 18px; margin-bottom: 12px; cursor: pointer; transition: border-color 0.15s;
+  }
+  .blog-card:hover { border-color: var(--accent); }
+  .blog-version { font-size: 11px; color: var(--accent); font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 6px; }
+  .blog-title { font-size: 16px; font-weight: 600; margin-bottom: 6px; }
+  .blog-date { font-size: 12px; color: var(--text-tertiary); margin-bottom: 10px; }
+  .blog-preview {
+    font-size: 13px; color: var(--text-secondary); line-height: 1.6;
+    display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+  }
+
+  /* Feedback */
+  .feedback-intro { font-size: 14px; color: var(--text-secondary); line-height: 1.8; margin-bottom: 24px; }
+  .feedback-option {
+    background: var(--surface); border: 1.5px solid var(--border); border-radius: 12px;
+    padding: 16px; margin-bottom: 10px; cursor: pointer; transition: border-color 0.15s;
+  }
+  .feedback-option:hover { border-color: var(--accent); }
+  .feedback-option-title { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+  .feedback-option-desc { font-size: 13px; color: var(--text-secondary); }
+  .feedback-textarea {
+    width: 100%; background: var(--surface); border: 1.5px solid var(--border);
+    border-radius: 12px; padding: 14px 16px; font-size: 14px; font-family: inherit;
+    resize: none; outline: none; min-height: 120px; color: var(--text-primary);
+    line-height: 1.6; margin-bottom: 12px; transition: border-color 0.2s;
+  }
+  .feedback-textarea:focus { border-color: var(--accent); }
+  .feedback-textarea::placeholder { color: var(--text-tertiary); }
+  .community-box { background: var(--accent-light); border-radius: 12px; padding: 18px; text-align: center; margin-top: 24px; }
+  .community-box-title { font-size: 15px; font-weight: 600; margin-bottom: 6px; }
+  .community-box-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 14px; }
+  .community-qr {
+    width: 100px; height: 100px; background: white; border-radius: 8px;
+    margin: 0 auto; display: flex; align-items: center; justify-content: center;
+    font-size: 12px; color: var(--text-tertiary);
+  }
+
   /* utility */
   .mt-8 { margin-top: 8px; }
   .mt-16 { margin-top: 16px; }
@@ -453,6 +619,10 @@
 <div id="screen-home" class="screen active">
   <nav class="nav">
     <div class="nav-logo">Ruth <span>路思</span></div>
+    <div class="nav-right">
+      <span class="nav-link" onclick="showScreen('screen-blog')">更新日志</span>
+      <span class="nav-link" onclick="showScreen('screen-feedback')">反馈</span>
+    </div>
   </nav>
 
   <div class="home-hero container">
@@ -476,20 +646,51 @@
       <span class="tag">见天地</span>
     </div>
     <div class="kelly-cta">
+      <button class="btn-ghost" onclick="showScreen('screen-profile')">了解凯利</button>
       <button class="btn-primary" onclick="startConversation()">开始对话</button>
     </div>
   </div>
 
-  <!-- 直接输入入口 -->
-  <div class="home-input-section">
-    <div class="home-input-label">带着困惑来</div>
-    <div class="home-input-box">
-      <textarea id="home-input" placeholder="你最近被什么困住了？和凯利说说。" rows="3"></textarea>
-      <div class="home-input-actions">
-        <button class="example-btn" onclick="fillExample()">填入示例</button>
-        <button class="submit-btn" onclick="goToConvoFromHome()">→</button>
+  <!-- 更多智者（建设中） -->
+  <div class="home-more-section">
+    <div class="section-label">更多智者 · 建设中</div>
+    <div class="building-card">
+      <div class="building-info">
+        <div class="building-avatar">马</div>
+        <div>
+          <div class="building-name">詹姆斯·马奇</div>
+          <div class="building-field">组织理论 · 决策</div>
+        </div>
       </div>
+      <span class="building-badge">待开发</span>
     </div>
+    <div class="building-card">
+      <div class="building-info">
+        <div class="building-avatar">戈</div>
+        <div>
+          <div class="building-name">欧文·戈夫曼</div>
+          <div class="building-field">社会学 · 日常互动</div>
+        </div>
+      </div>
+      <span class="building-badge">待开发</span>
+    </div>
+    <div class="building-card">
+      <div class="building-info">
+        <div class="building-avatar">布</div>
+        <div>
+          <div class="building-name">皮埃尔·布尔迪厄</div>
+          <div class="building-field">社会学 · 资本与场域</div>
+        </div>
+      </div>
+      <span class="building-badge">待开发</span>
+    </div>
+    <div class="home-invite" onclick="showScreen('screen-feedback')">
+      ＋ 推荐一位你认为值得更多人了解的智者
+    </div>
+  </div>
+
+  <div class="home-bottom">
+    <p><strong>Ruth</strong>，让智慧不再遥远，持续滋养你。</p>
   </div>
 </div>
 
@@ -519,6 +720,175 @@
   </div>
 </div>
 
+
+<!-- SCREEN 3: KELLY PROFILE -->
+<div id="screen-profile" class="screen">
+  <nav class="nav">
+    <button class="back-btn" onclick="showScreen('screen-home')">← 返回</button>
+    <div class="nav-logo">Ruth <span>路思</span></div>
+    <div style="width:60px"></div>
+  </nav>
+  <div class="container pb-40">
+    <div class="profile-hero">
+      <div class="profile-avatar-row">
+        <div class="profile-avatar">凯</div>
+        <div>
+          <div class="profile-name">乔治·凯利</div>
+          <div class="profile-identity">1905—1967 · 心理学家</div>
+        </div>
+      </div>
+      <div style="display:flex; gap:6px; flex-wrap:wrap;">
+        <span class="tag">个人建构心理学</span>
+        <span class="tag">人人都是科学家</span>
+        <span class="tag">构念系统</span>
+      </div>
+    </div>
+
+    <div class="profile-intro">
+      凯利是20世纪最被低估的心理学家之一。他有一个核心主张：每个人都是科学家——我们每个人都在用自己的"构念系统"理解世界、预测他人。当这套系统遇到挑战，我们要么更新它，要么死守它。<br><br>
+      他不给答案，他帮你重新提问。
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="profile-section-title">他的话</div>
+    <div class="profile-quote-item">"人的过程，在心理上是由他预期事件的方式所引导的。"</div>
+    <div class="profile-quote-item">"没有任何构念是终极的，所有构念都是暂时有用的假设。"</div>
+    <div class="profile-quote-item">"如果你不喜欢你的构念，你可以更换它。"</div>
+
+    <div class="divider"></div>
+
+    <div class="profile-section-title">核心概念</div>
+    <div class="concept-item">
+      <div class="concept-title">构念系统（Construct System）</div>
+      <div class="concept-desc">我们用来理解和预测世界的一套心理框架。每个人的构念系统都是独特的，也都是可以更新的。</div>
+    </div>
+    <div class="concept-item">
+      <div class="concept-title">双极建构（Bipolar Construct）</div>
+      <div class="concept-desc">每个构念都有两极，比如"听话—不听话""成功—失败"。理解两极，才能看见你真正在用什么框架。</div>
+    </div>
+    <div class="concept-item">
+      <div class="concept-title">焦虑、威胁与内疚</div>
+      <div class="concept-desc">凯利对这三种状态有精确的定义，与日常用法不同。读懂它们，很多"说不清楚的感觉"会突然变清晰。</div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="profile-section-title">带着这些问题来找他</div>
+    <div class="question-list">
+      <div class="question-item" onclick="goToConvoWithQ('我为什么总是用同一种方式看待孩子，却期待不同的结果？')">
+        我为什么总是用同一种方式看孩子，却期待不同的结果？
+        <span class="question-arrow">→</span>
+      </div>
+      <div class="question-item" onclick="goToConvoWithQ('我对自己有哪些根深蒂固的假设，让我看不见真实发生的事情？')">
+        我对自己有哪些根深蒂固的假设？
+        <span class="question-arrow">→</span>
+      </div>
+      <div class="question-item" onclick="goToConvoWithQ('我想改变，但为什么改变这么难？')">
+        我想改变，但为什么改变这么难？
+        <span class="question-arrow">→</span>
+      </div>
+      <div class="question-item" onclick="goToConvoWithQ('当别人的行为让我困惑或痛苦，我应该怎么理解？')">
+        别人的行为让我困惑，我该怎么理解？
+        <span class="question-arrow">→</span>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="profile-section-title">他的著作</div>
+    <div class="book-item">
+      <div>
+        <div class="book-title">《个人建构心理学》</div>
+        <div class="book-desc">The Psychology of Personal Constructs · 1955</div>
+      </div>
+      <div class="book-arrow">›</div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="profile-section-title">他看不到的</div>
+    <div class="limitation-box">
+      凯利能帮你看见自己的构念系统，但他不提供具体的教育方法、婚姻技巧或职场策略。遇到这些问题，他会承认边界，而不是硬答。<br><br>
+      他的理论具有自反性——他的框架本身也适用于他自己的框架。这意味着他不会让你陷入另一种教条。
+    </div>
+
+    <div class="profile-cta">
+      <button class="btn-primary" onclick="startConversation()">开始与凯利对话</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- SCREEN 4: BLOG -->
+<div id="screen-blog" class="screen">
+  <nav class="nav">
+    <button class="back-btn" onclick="showScreen('screen-home')">← 返回</button>
+    <div class="nav-logo">Ruth <span>路思</span></div>
+    <div style="width:60px"></div>
+  </nav>
+  <div class="container pb-40">
+    <div style="padding: 8px 0 20px">
+      <div style="font-size:20px; font-weight:700; margin-bottom:6px;">产品更新日志</div>
+      <div style="font-size:13px; color:var(--text-secondary);">Ruth 在生长。每一次迭代，都记录在这里。</div>
+    </div>
+    <div class="blog-intro">
+      我们相信，先把一件事做透，比同时做很多事更有价值。目前 Ruth 正在深度建设乔治·凯利。你的每一次对话、每一条反馈，都是这里更新的原因。
+    </div>
+    <div class="blog-card">
+      <div class="blog-version">v 1.01</div>
+      <div class="blog-title">凯利正式上线，Ruth 开始生长</div>
+      <div class="blog-date">2026年4月</div>
+      <div class="blog-preview">Ruth 第一个深度建设的智者是乔治·凯利。他是20世纪最被低估的心理学家之一，个人建构心理学的创始人。我们选择从他开始，因为他的理论本身就具有自反性——他不会让你陷入另一种教条。</div>
+    </div>
+    <div class="blog-card" style="opacity:0.5; cursor:default;">
+      <div class="blog-version">v 1.00</div>
+      <div class="blog-title">原型验证：Ruth 是什么</div>
+      <div class="blog-date">2026年3月</div>
+      <div class="blog-preview">最初的想法：让人真正读智者，而不只是了解他们。第一个原型验证了产品的核心假设……</div>
+    </div>
+  </div>
+</div>
+
+
+<!-- SCREEN 5: FEEDBACK -->
+<div id="screen-feedback" class="screen">
+  <nav class="nav">
+    <button class="back-btn" onclick="showScreen('screen-home')">← 返回</button>
+    <div class="nav-logo">Ruth <span>路思</span></div>
+    <div style="width:60px"></div>
+  </nav>
+  <div class="container pb-40">
+    <div style="padding: 8px 0 20px">
+      <div style="font-size:20px; font-weight:700; margin-bottom:6px;">你的反馈</div>
+      <div style="font-size:13px; color:var(--text-secondary);">直接决定 Ruth 下一步建设谁、做什么。</div>
+    </div>
+    <div class="feedback-intro">
+      告诉我们你和凯利对话的感受，或者推荐一位你认为值得更多人了解的智者，或者你想用来解决什么困惑。
+    </div>
+    <div class="feedback-option" onclick="setFeedbackType('moment')">
+      <div class="feedback-option-title">💡 分享一个被击中的时刻</div>
+      <div class="feedback-option-desc">凯利帮你看见了什么？哪句话让你停下来想了很久？</div>
+    </div>
+    <div class="feedback-option" onclick="setFeedbackType('sage')">
+      <div class="feedback-option-title">📚 推荐一位智者</div>
+      <div class="feedback-option-desc">你认为哪位思想者值得更多人了解，为什么？</div>
+    </div>
+    <div class="feedback-option" onclick="setFeedbackType('question')">
+      <div class="feedback-option-title">🌀 留下一个困惑</div>
+      <div class="feedback-option-desc">有什么问题是你希望某位智者能帮你想清楚的？</div>
+    </div>
+    <div style="height:16px;"></div>
+    <textarea class="feedback-textarea" id="feedback-text" placeholder="写在这里……"></textarea>
+    <button class="btn-primary">提交</button>
+    <div class="community-box">
+      <div class="community-box-title">加入 Ruth 交流群</div>
+      <div class="community-box-desc">一群同样在读、在想、在探索的人。一起和凯利对话，互相碰撞，分享有趣的玩法。</div>
+      <div class="community-qr">二维码占位</div>
+    </div>
+  </div>
+</div>
+
 <script>
 // 全局状态
 let conversationHistory = [];
@@ -536,22 +906,15 @@ function showScreen(id) {
   fixFooter();
 }
 
-// 填入示例
-function fillExample() {
-  document.getElementById('home-input').value =
-    '我女儿最近上课不认真，我跟她说了很多遍道理，她就是不听。感觉自己很失败。';
-}
+// 填入示例 - 已移除
 
-// 从首页进入对话
-function goToConvoFromHome() {
-  const text = document.getElementById('home-input').value.trim();
-  if (text) {
-    addUserMessage(text);
-    showScreen('screen-conversation');
-    sendMessage(text);
-  } else {
-    startConversation();
-  }
+// 从 profile 页带问题进入对话
+function goToConvoWithQ(q) {
+  showScreen('screen-conversation');
+  document.getElementById('convo-body').innerHTML = '';
+  conversationHistory = [];
+  addUserMessage(q);
+  sendMessage(q);
 }
 
 // 开始对话（显示欢迎消息）
@@ -719,6 +1082,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
 window.addEventListener('resize', fixFooter);
 fixFooter();
+
+function setFeedbackType(type) {
+  const placeholders = {
+    moment: '分享那个让你停下来想了很久的时刻……',
+    sage: '推荐的智者是：\n\n他/她的核心思想是：\n\n我认为他/她值得更多人了解，因为……',
+    question: '我一直在想的一个问题是……'
+  };
+  const ta = document.getElementById('feedback-text');
+  ta.placeholder = placeholders[type] || '写在这里……';
+  ta.focus();
+}
 </script>
 </body>
 </html>
