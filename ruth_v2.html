@@ -1068,6 +1068,9 @@ function showError(message) {
 // 格式化消息（处理换行、加粗等）
 function formatMessage(text) {
   return text
+    .replace(/^---+$/gm, '')          // 去掉分隔线
+    .replace(/\n{3,}/g, '\n\n')       // 连续空行压缩为最多一个
+    .trim()
     .replace(/\n/g, '<br>')
     .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
 }
