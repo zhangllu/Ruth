@@ -1038,12 +1038,19 @@ function showScreen(id) {
   console.log('showScreen:', id);
   const screens = document.querySelectorAll('.screen');
   console.log('Found screens:', screens.length);
-  screens.forEach(s => s.classList.remove('active'));
+
+  // 移除所有 active 类
+  screens.forEach(s => {
+    console.log('Removing active from:', s.id);
+    s.classList.remove('active');
+  });
+
   const target = document.getElementById(id);
   console.log('Target element:', target);
   if (target) {
     target.classList.add('active');
     console.log('Added active class to', id);
+    console.log('Login screen still active?', document.getElementById('screen-login').classList.contains('active'));
   } else {
     console.error('Screen not found:', id);
   }
