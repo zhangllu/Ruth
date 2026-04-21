@@ -147,6 +147,7 @@
     color: var(--text-secondary);
     line-height: 1.7;
     margin-bottom: 28px;
+    text-align: center;
   }
 
   /* 凯利主卡片 */
@@ -350,13 +351,13 @@
   .convo-footer {
     position: fixed;
     bottom: 0;
-    left: 0;
-    right: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 480px;
     background: var(--bg);
     border-top: 1px solid var(--border);
     padding: 12px 20px 24px;
-    max-width: 480px;
-    margin: 0 auto;
   }
 
   .convo-input-row {
@@ -903,7 +904,6 @@ function showScreen(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
   window.scrollTo(0, 0);
-  fixFooter();
 }
 
 // 填入示例 - 已移除
@@ -1051,22 +1051,6 @@ function scrollToBottom() {
   window.scrollTo(0, document.body.scrollHeight);
 }
 
-// 修复底部输入框位置
-function fixFooter() {
-  const footer = document.querySelector('.convo-footer');
-  if (!footer) return;
-  const vw = window.innerWidth;
-  if (vw > 480) {
-    footer.style.left = '50%';
-    footer.style.transform = 'translateX(-50%)';
-    footer.style.width = '480px';
-  } else {
-    footer.style.left = '0';
-    footer.style.transform = 'none';
-    footer.style.width = '100%';
-  }
-}
-
 // 输入框回车发送
 document.addEventListener('DOMContentLoaded', () => {
   const input = document.getElementById('convo-input');
@@ -1079,9 +1063,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 });
-
-window.addEventListener('resize', fixFooter);
-fixFooter();
 
 function setFeedbackType(type) {
   const placeholders = {
