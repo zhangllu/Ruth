@@ -374,11 +374,11 @@
     resize: none;
     outline: none;
     min-height: 80px;
-    max-height: none;
+    max-height: 160px;
     color: var(--text-primary);
     line-height: 1.5;
     display: block;
-    overflow: hidden;
+    overflow-y: auto;
   }
   .convo-input:focus { border-color: var(--accent); }
 
@@ -1056,10 +1056,6 @@ document.addEventListener('DOMContentLoaded', () => {
         e.preventDefault();
         sendMessage();
       }
-    });
-    input.addEventListener('input', () => {
-      input.style.height = 'auto';
-      input.style.height = input.scrollHeight + 'px';
     });
   }
 });
