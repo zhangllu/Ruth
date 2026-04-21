@@ -625,17 +625,120 @@
   .mt-16 { margin-top: 16px; }
   .mt-24 { margin-top: 24px; }
   .pb-40 { padding-bottom: 40px; }
+
+  /* login */
+  .login-screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 20px;
+  }
+  .login-card {
+    background: var(--surface);
+    border-radius: 16px;
+    padding: 32px 24px;
+    width: 100%;
+    max-width: 360px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  }
+  .login-title {
+    font-size: 20px;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 8px;
+  }
+  .login-subtitle {
+    font-size: 13px;
+    color: var(--text-secondary);
+    text-align: center;
+    margin-bottom: 24px;
+  }
+  .login-form-item {
+    margin-bottom: 16px;
+  }
+  .login-label {
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 6px;
+    display: block;
+  }
+  .login-input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 14px;
+    background: var(--bg);
+    color: var(--text-primary);
+    transition: border-color 0.2s;
+  }
+  .login-input:focus {
+    outline: none;
+    border-color: var(--accent);
+  }
+  .login-error {
+    color: #d32f2f;
+    font-size: 13px;
+    text-align: center;
+    margin-bottom: 16px;
+    min-height: 20px;
+  }
+  .login-hint {
+    font-size: 12px;
+    color: var(--text-tertiary);
+    text-align: center;
+    margin-top: 16px;
+    line-height: 1.6;
+  }
+  .login-hint code {
+    background: var(--tag-bg);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 11px;
+  }
 </style>
 </head>
 <body>
 
+<!-- SCREEN 0: LOGIN -->
+<div id="screen-login" class="screen login-screen">
+  <div class="login-card">
+    <div class="login-title">欢迎来到 Ruth 路思</div>
+    <div class="login-subtitle">请登录以开始与智者对话</div>
+
+    <div class="login-error" id="login-error"></div>
+
+    <div class="login-form-item">
+      <label class="login-label">邮箱</label>
+      <input type="email" class="login-input" id="login-email" placeholder="your@email.com">
+    </div>
+
+    <div class="login-form-item">
+      <label class="login-label">密码</label>
+      <input type="password" class="login-input" id="login-password" placeholder="输入密码">
+    </div>
+
+    <button class="btn-primary" style="width:100%" onclick="handleLogin()">登录</button>
+
+    <div class="login-hint">
+      测试账号：<br>
+      <code>test@ruth.com</code> / <code>ruth123</code><br>
+      <code>demo@ruth.com</code> / <code>demo123</code><br>
+      <code>guest@ruth.com</code> / <code>guest123</code>
+    </div>
+  </div>
+</div>
+
 <!-- SCREEN 1: HOME -->
-<div id="screen-home" class="screen active">
+<div id="screen-home" class="screen">
   <nav class="nav">
     <div class="nav-logo">Ruth <span>路思</span></div>
     <div class="nav-right">
       <span class="nav-link" onclick="showScreen('screen-blog')">更新日志</span>
       <span class="nav-link" onclick="showScreen('screen-feedback')">反馈</span>
+      <span class="nav-link" onclick="handleLogout()" style="color:var(--text-tertiary)">退出</span>
     </div>
   </nav>
 
@@ -908,6 +1011,15 @@
 let conversationHistory = [];
 let isLoading = false;
 let abortController = null; // 用于停止生成
+let isLoggedIn = false; // 登录状态
+
+// 硬编码的账号列表
+const ACCOUNTS = [
+  { email: 'test@ruth.com', password: 'ruth123' },
+  { email: 'demo@ruth.com', password: 'demo123' },
+  { email: 'guest@ruth.com', password: 'guest123' }
+];
+
 
 
 const API_BASE = window.location.hostname === 'localhost'
@@ -934,6 +1046,11 @@ function goToConvoWithQ(q) {
 
 // 开始对话（显示欢迎消息）
 function startConversation() {
+  // 检查登录状态
+  if (!isLoggedIn) {
+    showScreen('screen-login');
+    return;
+  }
   showScreen('screen-conversation');
   document.getElementById('convo-body').innerHTML = `
     <div class="convo-response-text">
@@ -1156,19 +1273,6 @@ function scrollToBottom() {
   window.scrollTo(0, document.body.scrollHeight);
 }
 
-// 输入框回车发送
-document.addEventListener('DOMContentLoaded', () => {
-  const input = document.getElementById('convo-input');
-  if (input) {
-    input.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' && !e.shiftKey) {
-        e.preventDefault();
-        sendMessage();
-      }
-    });
-  }
-});
-
 function setFeedbackType(type) {
   const placeholders = {
     moment: '分享那个让你停下来想了很久的时刻……',
@@ -1179,6 +1283,81 @@ function setFeedbackType(type) {
   ta.placeholder = placeholders[type] || '写在这里……';
   ta.focus();
 }
+
+// 登录处理
+function handleLogin() {
+  const email = document.getElementById('login-email').value.trim();
+  const password = document.getElementById('login-password').value;
+  const errorEl = document.getElementById('login-error');
+
+  errorEl.textContent = '';
+
+  if (!email || !password) {
+    errorEl.textContent = '请输入邮箱和密码';
+    return;
+  }
+
+  // 检查账号是否匹配
+  const account = ACCOUNTS.find(acc => acc.email === email && acc.password === password);
+
+  if (account) {
+    isLoggedIn = true;
+    // 保存登录状态到 localStorage
+    localStorage.setItem('ruth_logged_in', 'true');
+    localStorage.setItem('ruth_email', email);
+    // 跳转到首页
+    showScreen('screen-home');
+  } else {
+    errorEl.textContent = '邮箱或密码错误，请检查';
+  }
+}
+
+// 退出登录
+function handleLogout() {
+  isLoggedIn = false;
+  localStorage.removeItem('ruth_logged_in');
+  localStorage.removeItem('ruth_email');
+  showScreen('screen-login');
+}
+
+// 页面初始化：检查登录状态
+document.addEventListener('DOMContentLoaded', () => {
+  // 检查 localStorage 中的登录状态
+  const savedLogin = localStorage.getItem('ruth_logged_in');
+  if (savedLogin === 'true') {
+    isLoggedIn = true;
+    // 默认显示首页
+    showScreen('screen-home');
+  } else {
+    // 未登录，显示登录页
+    showScreen('screen-login');
+  }
+
+  // 输入框回车发送
+  const input = document.getElementById('convo-input');
+  if (input) {
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage();
+      }
+    });
+  }
+
+  // 登录页面的回车支持
+  const loginEmail = document.getElementById('login-email');
+  const loginPassword = document.getElementById('login-password');
+  [loginEmail, loginPassword].forEach(el => {
+    if (el) {
+      el.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          handleLogin();
+        }
+      });
+    }
+  });
+});
 </script>
 </body>
 </html>
