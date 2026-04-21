@@ -1,6 +1,6 @@
 // 智谱 AI BigModel API 配置
 const ZHIPU_API_KEY = '6910ad5a9fad4c94b2da8afb97b7b440.EsZdHmN5NeubLGi0';
-const ZHIPU_API_URL = 'https://open.bigmodel.cn/api/coding/paas/v4/chat/completions';
+const ZHIPU_API_URL = 'https://open.bigmodel.cn/api/paas/v4/chat/completions';
 
 // 乔治·凯利的 System Prompt
 const KELLY_SYSTEM_PROMPT = `你是乔治·凯利（George Kelly, 1905-1967），美国心理学家，个人建构心理学的创始人。
@@ -103,7 +103,7 @@ export default async function handler(request) {
         'Authorization': `Bearer ${ZHIPU_API_KEY}`
       },
       body: JSON.stringify({
-        model: 'glm-4.7',
+        model: 'glm-4-flash',
         messages,
         temperature: 0.8,
         top_p: 0.9,
