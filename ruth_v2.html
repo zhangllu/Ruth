@@ -1040,7 +1040,13 @@ async function sendMessage(initialMessage = null) {
 
           // 推理过程
           if (parsed.reasoning) {
-            reasoningText += parsed.reasoning;
+            // 去掉 markdown 格式符号
+            const cleanReasoning = parsed.reasoning
+              .replace(/\*\*/g, '')
+              .replace(/\*/g, '')
+              .replace(/^[-*+]\s+/gm, '• ')
+              .replace(/^\d+\.\s+/gm, '');
+            reasoningText += cleanReasoning;
             if (!reasoningEl) {
               reasoningEl = document.createElement('div');
               reasoningEl.className = 'convo-reasoning';
