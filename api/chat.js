@@ -241,9 +241,15 @@ export default async function handler(req, res) {
 
         try {
           const parsed = JSON.parse(data);
-          const text = parsed.choices?.[0]?.delta?.content;
-          if (text) {
-            res.write(`data: ${JSON.stringify({ text })}\n\n`);
+          const delta = parsed.choices?.[0]?.delta;
+
+          // 推理内容（思考过程）
+          if (delta?.reasoning_content) {
+            res.write(`data: ${JSON.stringify({ reasoning: delta.reasoning_content })}\n\n`);
+          }
+          // 正常回复内容
+          if (delta?.content) {
+            res.write(`data: ${JSON.stringify({ text: delta.content })}\n\n`);
           }
         } catch {}
       }

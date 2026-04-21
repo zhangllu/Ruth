@@ -340,6 +340,17 @@
     margin-bottom: 16px;
   }
 
+  .convo-reasoning {
+    font-size: 13px;
+    color: var(--text-tertiary);
+    line-height: 1.6;
+    margin-bottom: 12px;
+    padding: 8px 12px;
+    background: rgba(0,0,0,0.02);
+    border-radius: 8px;
+    font-style: italic;
+  }
+
   .convo-response-text {
     font-size: 15px;
     line-height: 1.85;
@@ -1007,7 +1018,9 @@ async function sendMessage(initialMessage = null) {
     const msgEl = addSageMessage('');
     const reader = response.body.getReader();
     const decoder = new TextDecoder();
+    let reasoningText = '';
     let fullText = '';
+    let reasoningEl = null;
     let buffer = '';
 
     while (true) {
@@ -1024,15 +1037,37 @@ async function sendMessage(initialMessage = null) {
         if (data === '[DONE]') continue;
         try {
           const parsed = JSON.parse(data);
+
+          // 推理过程
+          if (parsed.reasoning) {
+            reasoningText += parsed.reasoning;
+            if (!reasoningEl) {
+              reasoningEl = document.createElement('div');
+              reasoningEl.className = 'convo-reasoning';
+              msgEl.insertBefore(reasoningEl, msgEl.firstChild);
+            }
+            reasoningEl.textContent = reasoningText;
+            scrollToBottom();
+          }
+
+          // 正常回复
           if (parsed.text) {
             fullText += parsed.text;
             msgEl.innerHTML = formatMessage(fullText);
+            // 推理元素可能被覆盖，重新添加
+            if (reasoningText && !msgEl.querySelector('.convo-reasoning')) {
+              reasoningEl = document.createElement('div');
+              reasoningEl.className = 'convo-reasoning';
+              reasoningEl.textContent = reasoningText;
+              msgEl.insertBefore(reasoningEl, msgEl.firstChild);
+            }
             scrollToBottom();
           }
         } catch {}
       }
     }
 
+    // 保存到历史（只保存正式回复，不保存推理过程）
     if (fullText) {
       conversationHistory.push(
         { role: 'user', content: text },
