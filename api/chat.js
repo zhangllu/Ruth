@@ -94,7 +94,7 @@ export default async function handler(req, res) {
         'Authorization': `Bearer ${ZHIPU_API_KEY}`
       },
       body: JSON.stringify({
-        model: 'glm-4.7',
+        model: 'glm-4-flash',
         messages: [
           { role: 'system', content: KELLY_SYSTEM_PROMPT },
           ...conversationHistory,
@@ -111,11 +111,9 @@ export default async function handler(req, res) {
     }
 
     const data = await response.json();
-    const msg = data.choices[0].message;
-    const content = msg.content || msg.reasoning_content || '';
     return res.status(200).json({
       success: true,
-      message: content
+      message: data.choices[0].message.content
     });
 
   } catch (error) {
