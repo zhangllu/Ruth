@@ -1032,8 +1032,18 @@ const API_BASE = window.location.hostname === 'localhost'
 
 // 页面切换
 function showScreen(id) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
+  console.log('showScreen:', id);
+  const screens = document.querySelectorAll('.screen');
+  console.log('Found screens:', screens.length);
+  screens.forEach(s => s.classList.remove('active'));
+  const target = document.getElementById(id);
+  console.log('Target element:', target);
+  if (target) {
+    target.classList.add('active');
+    console.log('Added active class to', id);
+  } else {
+    console.error('Screen not found:', id);
+  }
   window.scrollTo(0, 0);
 }
 
