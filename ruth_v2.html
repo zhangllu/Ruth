@@ -917,7 +917,6 @@ function goToConvoWithQ(q) {
 function startConversation() {
   showScreen('screen-conversation');
   document.getElementById('convo-body').innerHTML = `
-    <div class="convo-sage-label">乔治·凯利</div>
     <div class="convo-response-text">
       <p>你好。我是乔治·凯利。</p>
       <p>我相信每个人都是科学家——我们都有自己的构念系统，用来理解世界、预测他人。</p>
@@ -931,7 +930,6 @@ function startConversation() {
 function addUserMessage(text) {
   const body = document.getElementById('convo-body');
   body.innerHTML += `
-    <div class="convo-user-label">你说</div>
     <div class="convo-user-msg">${escapeHtml(text)}</div>
   `;
   scrollToBottom();
@@ -940,13 +938,9 @@ function addUserMessage(text) {
 // 添加凯利的回复到界面，返回消息内容元素（供流式更新）
 function addSageMessage(text) {
   const body = document.getElementById('convo-body');
-  const label = document.createElement('div');
-  label.className = 'convo-sage-label';
-  label.textContent = '乔治·凯利';
   const msg = document.createElement('div');
   msg.className = 'convo-response-text';
   msg.innerHTML = formatMessage(text);
-  body.appendChild(label);
   body.appendChild(msg);
   scrollToBottom();
   return msg;
