@@ -1290,9 +1290,13 @@ function setFeedbackType(type) {
 
 // 登录处理
 function handleLogin() {
+  console.log('handleLogin called');
   const email = document.getElementById('login-email').value.trim();
   const password = document.getElementById('login-password').value;
   const errorEl = document.getElementById('login-error');
+
+  console.log('email:', email, 'password:', password);
+  console.log('ACCOUNTS:', ACCOUNTS);
 
   errorEl.textContent = '';
 
@@ -1303,6 +1307,8 @@ function handleLogin() {
 
   // 检查账号是否匹配
   const account = ACCOUNTS.find(acc => acc.email === email && acc.password === password);
+
+  console.log('found account:', account);
 
   if (account) {
     isLoggedIn = true;
