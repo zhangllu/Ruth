@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ruth 路思 - 与智者对话</title>
+<style>
+  :root {
+    --bg: #F5F0E8;
+    --surface: #FEFCF8;
+    --surface-alt: #F0EBE1;
+    --text-primary: #1C1A18;
+    --text-secondary: #6E6059;
+    --text-tertiary: #A09488;
+    --accent: #8C6D4F;
+    --accent-light: #EDE0D0;
+    --border: #E2D8CC;
+    --tag-bg: #EDE6DC;
+    --building: #D4C5B0;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text-primary);
+    font-family: -apple-system, 'PingFang SC', 'Hiragino Sans GB', sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  .screen { display: none; min-height: 100vh; }
+  .screen.active { display: block; }
+
+  .container { max-width: 480px; margin: 0 auto; padding: 0 20px; }
+
+  /* Nav */
+  .nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 20px;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+  .nav-logo {
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: var(--text-primary);
+    cursor: pointer;
+  }
+  .nav-logo span { color: var(--accent); }
+  .nav-right { display: flex; align-items: center; gap: 16px; }
+  .nav-link {
+    font-size: 13px;
+    color: var(--text-secondary);
+    cursor: pointer;
+  }
+  .nav-link:hover { color: var(--accent); }
+  .back-btn {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 13px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 0;
+  }
+  .back-btn:hover { color: var(--accent); }
+
+  /* Buttons */
+  .btn-primary {
+    width: 100%;
+    padding: 14px 20px;
+    background: var(--text-primary);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: opacity 0.15s;
+  }
+  .btn-primary:hover { opacity: 0.85; }
+  .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  .btn-secondary {
+    width: 100%;
+    padding: 13px 20px;
+    background: transparent;
+    color: var(--text-primary);
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: border-color 0.15s;
+  }
+  .btn-secondary:hover { border-color: var(--accent); }
+
+  .btn-ghost {
+    padding: 10px 16px;
+    background: transparent;
+    color: var(--text-secondary);
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+
+  .tag {
+    display: inline-block;
+    padding: 3px 9px;
+    background: var(--tag-bg);
+    color: var(--text-secondary);
+    border-radius: 20px;
+    font-size: 12px;
+  }
+
+  .divider { height: 1px; background: var(--border); margin: 24px 0; }
+
+  /* HOME SCREEN */
+  .home-hero {
+    padding: 36px 20px 0;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+
+  .home-tagline {
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 1.5;
+    letter-spacing: -0.01em;
+    margin-bottom: 10px;
+    text-align: center;
+  }
+  .home-tagline .part1 { color: var(--accent); }
+  .home-tagline .part2 { color: var(--text-primary); }
+
+  .home-desc {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    margin-bottom: 28px;
+  }
+
+  /* 凯利主卡片 */
+  .kelly-card {
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: 16px;
+    padding: 22px 20px;
+    margin: 0 20px 12px;
+    max-width: 440px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .kelly-card-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 14px;
+  }
+
+  .kelly-avatar {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: var(--accent-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--accent);
+    flex-shrink: 0;
+  }
+
+  .kelly-name { font-size: 18px; font-weight: 700; margin-bottom: 2px; }
+  .kelly-identity { font-size: 13px; color: var(--text-secondary); }
+
+  .kelly-quote {
+    font-size: 14px;
+    color: var(--text-primary);
+    line-height: 1.7;
+    font-style: italic;
+    padding-left: 12px;
+    border-left: 2px solid var(--accent-light);
+    margin-bottom: 16px;
+  }
+
+  .kelly-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 18px; }
+
+  .kelly-cta { display: flex; gap: 8px; }
+  .kelly-cta .btn-ghost { flex: 1; }
+  .kelly-cta .btn-primary { flex: 2; border-radius: 8px; }
+
+  /* 对话入口 */
+  .home-input-section {
+    padding: 20px 20px 0;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+
+  .home-input-label {
+    font-size: 12px;
+    color: var(--text-tertiary);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .home-input-box {
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: 14px;
+    padding: 16px;
+    transition: border-color 0.2s;
+  }
+  .home-input-box:focus-within { border-color: var(--accent); }
+
+  .home-input-box textarea {
+    width: 100%;
+    border: none;
+    background: transparent;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text-primary);
+    resize: none;
+    outline: none;
+    min-height: 72px;
+    font-family: inherit;
+  }
+  .home-input-box textarea::placeholder { color: var(--text-tertiary); }
+
+  .home-input-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+  }
+
+  .example-btn {
+    font-size: 12px;
+    color: var(--text-tertiary);
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 0;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .example-btn:hover { color: var(--accent); }
+
+  .submit-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    background: var(--text-primary);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    color: white;
+    font-size: 16px;
+    transition: opacity 0.15s;
+  }
+  .submit-btn:hover { opacity: 0.8; }
+
+  /* CONVERSATION SCREEN */
+  .convo-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    max-width: 480px;
+    margin: 0 auto;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+
+  .convo-sage-info { display: flex; align-items: center; gap: 10px; }
+  .convo-avatar {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: var(--accent-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--accent);
+  }
+  .convo-name { font-size: 15px; font-weight: 600; }
+  .convo-subtitle { font-size: 11px; color: var(--text-tertiary); }
+
+  .convo-body {
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 24px 20px 140px;
+  }
+
+  .convo-user-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-tertiary);
+    margin-bottom: 6px;
+  }
+
+  .convo-user-msg {
+    background: var(--surface-alt);
+    border-radius: 12px;
+    padding: 14px 16px;
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    margin-bottom: 28px;
+    border-left: 3px solid var(--border);
+  }
+
+  .convo-sage-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 16px;
+  }
+
+  .convo-response-text {
+    font-size: 15px;
+    line-height: 1.85;
+    color: var(--text-primary);
+  }
+  .convo-response-text p { margin-bottom: 16px; }
+  .convo-response-text strong { font-weight: 600; }
+
+  .convo-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--bg);
+    border-top: 1px solid var(--border);
+    padding: 12px 20px 24px;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+
+  .convo-input-row {
+    display: flex;
+    gap: 8px;
+    align-items: flex-end;
+    margin-bottom: 10px;
+  }
+
+  .convo-input {
+    flex: 1;
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    padding: 10px 14px;
+    font-size: 14px;
+    font-family: inherit;
+    resize: none;
+    outline: none;
+    min-height: 42px;
+    max-height: 100px;
+    color: var(--text-primary);
+    line-height: 1.5;
+  }
+  .convo-input:focus { border-color: var(--accent); }
+  .convo-input::placeholder { color: var(--text-tertiary); }
+
+  .convo-send {
+    width: 38px;
+    height: 38px;
+    background: var(--text-primary);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    color: white;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: opacity 0.15s;
+  }
+  .convo-send:hover { opacity: 0.8; }
+  .convo-send:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  .convo-actions { display: flex; gap: 8px; }
+  .convo-actions .btn-ghost { flex: 1; font-size: 13px; padding: 9px 12px; }
+
+  /* Loading indicator */
+  .typing-indicator {
+    display: flex;
+    gap: 4px;
+    padding: 12px 16px;
+    background: var(--surface);
+    border-radius: 12px;
+    width: fit-content;
+  }
+
+  .typing-dot {
+    width: 8px;
+    height: 8px;
+    background: var(--text-tertiary);
+    border-radius: 50%;
+    animation: typing 1.4s infinite;
+  }
+  .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+  .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+  @keyframes typing {
+    0%, 60%, 100% { transform: translateY(0); }
+    30% { transform: translateY(-4px); }
+  }
+
+  /* Error message */
+  .error-message {
+    background: #fee;
+    color: #c33;
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin-bottom: 16px;
+    font-size: 13px;
+  }
+
+  /* utility */
+  .mt-8 { margin-top: 8px; }
+  .mt-16 { margin-top: 16px; }
+  .mt-24 { margin-top: 24px; }
+  .pb-40 { padding-bottom: 40px; }
+</style>
+</head>
+<body>
+
+<!-- SCREEN 1: HOME -->
+<div id="screen-home" class="screen active">
+  <nav class="nav">
+    <div class="nav-logo">Ruth <span>路思</span></div>
+  </nav>
+
+  <div class="home-hero container">
+    <div class="home-tagline"><span class="part1">问智者，读智者。</span><span class="part2">见天地，见自己。</span></div>
+    <div class="home-desc">第一位深度建设的智者是乔治·凯利，一位被严重低估的心理学家。</div>
+  </div>
+
+  <!-- 凯利主卡片 -->
+  <div class="kelly-card">
+    <div class="kelly-card-header">
+      <div class="kelly-avatar">凯</div>
+      <div>
+        <div class="kelly-name">乔治·凯利</div>
+        <div class="kelly-identity">心理学家 · 个人建构心理学创始人</div>
+      </div>
+    </div>
+    <div class="kelly-quote">"每个人都是科学家——我们用自己的构念系统理解世界、预测他人、做出判断。"</div>
+    <div class="kelly-tags">
+      <span class="tag">见自己</span>
+      <span class="tag">构念系统</span>
+      <span class="tag">见天地</span>
+    </div>
+    <div class="kelly-cta">
+      <button class="btn-primary" onclick="startConversation()">开始对话</button>
+    </div>
+  </div>
+
+  <!-- 直接输入入口 -->
+  <div class="home-input-section">
+    <div class="home-input-label">带着困惑来</div>
+    <div class="home-input-box">
+      <textarea id="home-input" placeholder="你最近被什么困住了？和凯利说说。" rows="3"></textarea>
+      <div class="home-input-actions">
+        <button class="example-btn" onclick="fillExample()">填入示例</button>
+        <button class="submit-btn" onclick="goToConvoFromHome()">→</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- SCREEN 2: CONVERSATION -->
+<div id="screen-conversation" class="screen">
+  <div class="convo-nav">
+    <button class="back-btn" onclick="showScreen('screen-home')">←</button>
+    <div class="convo-sage-info">
+      <div class="convo-avatar">凯</div>
+      <div>
+        <div class="convo-name">乔治·凯利</div>
+        <div class="convo-subtitle">个人建构心理学</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="convo-body" id="convo-body">
+    <!-- 对话内容会动态插入这里 -->
+  </div>
+
+  <div class="convo-footer">
+    <div class="convo-input-row">
+      <textarea class="convo-input" id="convo-input" placeholder="继续说……" rows="1"></textarea>
+      <button class="convo-send" id="convo-send" onclick="sendMessage()">→</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// 全局状态
+let conversationHistory = [];
+let isLoading = false;
+
+const API_BASE = window.location.hostname === 'localhost'
+  ? 'http://localhost:3000'
+  : window.location.origin;
+
+// 页面切换
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0, 0);
+  fixFooter();
+}
+
+// 填入示例
+function fillExample() {
+  document.getElementById('home-input').value =
+    '我女儿最近上课不认真，我跟她说了很多遍道理，她就是不听。感觉自己很失败。';
+}
+
+// 从首页进入对话
+function goToConvoFromHome() {
+  const text = document.getElementById('home-input').value.trim();
+  if (text) {
+    addUserMessage(text);
+    showScreen('screen-conversation');
+    sendMessage(text);
+  } else {
+    startConversation();
+  }
+}
+
+// 开始对话（显示欢迎消息）
+function startConversation() {
+  showScreen('screen-conversation');
+  document.getElementById('convo-body').innerHTML = `
+    <div class="convo-sage-label">乔治·凯利</div>
+    <div class="convo-response-text">
+      <p>你好。我是乔治·凯利。</p>
+      <p>我相信每个人都是科学家——我们都有自己的构念系统，用来理解世界、预测他人。</p>
+      <p>我不会给你答案，但我会帮你看见你正在使用的框架。然后，我们一起问：这个框架还适合你吗？</p>
+      <p>你最近在想什么？</p>
+    </div>
+  `;
+}
+
+// 添加用户消息到界面
+function addUserMessage(text) {
+  const body = document.getElementById('convo-body');
+  body.innerHTML += `
+    <div class="convo-user-label">你说</div>
+    <div class="convo-user-msg">${escapeHtml(text)}</div>
+  `;
+  scrollToBottom();
+}
+
+// 添加凯利的回复到界面
+function addSageMessage(text) {
+  const body = document.getElementById('convo-body');
+  body.innerHTML += `
+    <div class="convo-sage-label">乔治·凯利</div>
+    <div class="convo-response-text">${formatMessage(text)}</div>
+  `;
+  scrollToBottom();
+}
+
+// 显示加载状态
+function showLoading() {
+  const body = document.getElementById('convo-body');
+  body.innerHTML += `
+    <div class="typing-indicator" id="typing-indicator">
+      <div class="typing-dot"></div>
+      <div class="typing-dot"></div>
+      <div class="typing-dot"></div>
+    </div>
+  `;
+  scrollToBottom();
+}
+
+// 隐藏加载状态
+function hideLoading() {
+  const indicator = document.getElementById('typing-indicator');
+  if (indicator) indicator.remove();
+}
+
+// 发送消息
+async function sendMessage(initialMessage = null) {
+  if (isLoading) return;
+
+  const input = document.getElementById('convo-input');
+  const sendBtn = document.getElementById('convo-send');
+  const text = initialMessage || input.value.trim();
+
+  if (!text) return;
+
+  if (!initialMessage) {
+    input.value = '';
+    addUserMessage(text);
+  }
+
+  isLoading = true;
+  sendBtn.disabled = true;
+  showLoading();
+
+  try {
+    const response = await fetch(`${API_BASE}/api/chat`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        message: text,
+        conversationHistory: conversationHistory
+      })
+    });
+
+    const data = await response.json();
+
+    hideLoading();
+
+    if (data.success) {
+      addSageMessage(data.message);
+      conversationHistory.push(
+        { role: 'user', content: text },
+        { role: 'assistant', content: data.message }
+      );
+    } else {
+      showError(data.error || '对话失败，请稍后重试');
+    }
+
+  } catch (error) {
+    hideLoading();
+    showError('网络错误，请检查连接后重试');
+    console.error('API Error:', error);
+  }
+
+  isLoading = false;
+  sendBtn.disabled = false;
+}
+
+// 显示错误
+function showError(message) {
+  const body = document.getElementById('convo-body');
+  body.innerHTML += `
+    <div class="error-message">${escapeHtml(message)}</div>
+  `;
+  scrollToBottom();
+}
+
+// 格式化消息（处理换行、加粗等）
+function formatMessage(text) {
+  return text
+    .replace(/\n/g, '<br>')
+    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+}
+
+// HTML 转义
+function escapeHtml(text) {
+  const div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
+}
+
+// 滚动到底部
+function scrollToBottom() {
+  window.scrollTo(0, document.body.scrollHeight);
+}
+
+// 修复底部输入框位置
+function fixFooter() {
+  const footer = document.querySelector('.convo-footer');
+  if (!footer) return;
+  const vw = window.innerWidth;
+  if (vw > 480) {
+    footer.style.left = '50%';
+    footer.style.transform = 'translateX(-50%)';
+    footer.style.width = '480px';
+  } else {
+    footer.style.left = '0';
+    footer.style.transform = 'none';
+    footer.style.width = '100%';
+  }
+}
+
+// 输入框回车发送
+document.addEventListener('DOMContentLoaded', () => {
+  const input = document.getElementById('convo-input');
+  if (input) {
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage();
+      }
+    });
+  }
+});
+
+window.addEventListener('resize', fixFooter);
+fixFooter();
+</script>
+</body>
+</html>

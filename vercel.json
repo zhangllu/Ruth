@@ -1,5 +1,13 @@
 {
   "rewrites": [
     { "source": "/(.*)", "destination": "/ruth_v1.html" }
-  ]
+  ],
+  "functions": {
+    "api/**/*.ts": {
+      "runtime": "edge"
+    }
+  },
+  "env": {
+    "ZHIPU_API_KEY": "@zhipu_api_key"
+  }
 }

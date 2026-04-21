@@ -1,0 +1,13 @@
+{
+  "name": "ruth",
+  "version": "2.0.0",
+  "description": "Ruth 路思 - 与智者对话",
+  "type": "module",
+  "scripts": {
+    "dev": "vercel dev",
+    "deploy": "vercel --prod"
+  },
+  "dependencies": {
+    "vercel": "^37.0.0"
+  }
+}
