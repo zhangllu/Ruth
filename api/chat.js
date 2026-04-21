@@ -1,5 +1,3 @@
-export const config = { runtime: 'nodejs' };
-
 // OpenRouter API 配置
 const OPENROUTER_API_KEY = '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';
 const OPENROUTER_API_URL = 'https://openrouter.ai/api/v1/chat/completions';
