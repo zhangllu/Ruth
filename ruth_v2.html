@@ -32,7 +32,10 @@
 
   .screen { display: none; min-height: 100vh; }
   .screen.active { display: block; }
-  .login-screen.active { display: flex; }
+  /* 登录页面特殊处理：使用flex布局来居中 */
+  #screen-login.active {
+    display: flex;
+  }
 
   .container { max-width: 480px; margin: 0 auto; padding: 0 20px; }
 
