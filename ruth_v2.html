@@ -1316,7 +1316,9 @@ function handleLogin() {
     localStorage.setItem('ruth_logged_in', 'true');
     localStorage.setItem('ruth_email', email);
     // 跳转到首页
+    console.log('Calling showScreen...');
     showScreen('screen-home');
+    console.log('showScreen called');
   } else {
     errorEl.textContent = '邮箱或密码错误，请检查';
   }
