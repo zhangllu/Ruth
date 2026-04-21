@@ -599,23 +599,7 @@
   }
 
   /* Feedback */
-  .feedback-intro { font-size: 14px; color: var(--text-secondary); line-height: 1.8; margin-bottom: 24px; }
-  .feedback-option {
-    background: var(--surface); border: 1.5px solid var(--border); border-radius: 12px;
-    padding: 16px; margin-bottom: 10px; cursor: pointer; transition: border-color 0.15s;
-  }
-  .feedback-option:hover { border-color: var(--accent); }
-  .feedback-option-title { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
-  .feedback-option-desc { font-size: 13px; color: var(--text-secondary); }
-  .feedback-textarea {
-    width: 100%; background: var(--surface); border: 1.5px solid var(--border);
-    border-radius: 12px; padding: 14px 16px; font-size: 14px; font-family: inherit;
-    resize: none; outline: none; min-height: 120px; color: var(--text-primary);
-    line-height: 1.6; margin-bottom: 12px; transition: border-color 0.2s;
-  }
-  .feedback-textarea:focus { border-color: var(--accent); }
-  .feedback-textarea::placeholder { color: var(--text-tertiary); }
-  .community-box { background: var(--accent-light); border-radius: 12px; padding: 18px; text-align: center; margin-top: 24px; }
+  .community-box { background: var(--accent-light); border-radius: 12px; padding: 18px; text-align: center; }
   .community-box-title { font-size: 15px; font-weight: 600; margin-bottom: 6px; }
   .community-box-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 14px; }
   .community-qr {
@@ -983,27 +967,9 @@
   </nav>
   <div class="container pb-40">
     <div style="padding: 8px 0 20px">
-      <div style="font-size:20px; font-weight:700; margin-bottom:6px;">你的反馈</div>
-      <div style="font-size:13px; color:var(--text-secondary);">直接决定 Ruth 下一步建设谁、做什么。</div>
+      <div style="font-size:20px; font-weight:700; margin-bottom:6px;">反馈与交流</div>
+      <div style="font-size:13px; color:var(--text-secondary);">欢迎加入 Ruth 交流群，一起探索、分享、碰撞。</div>
     </div>
-    <div class="feedback-intro">
-      告诉我们你和凯利对话的感受，或者推荐一位你认为值得更多人了解的智者，或者你想用来解决什么困惑。
-    </div>
-    <div class="feedback-option" onclick="setFeedbackType('moment')">
-      <div class="feedback-option-title">💡 分享一个被击中的时刻</div>
-      <div class="feedback-option-desc">凯利帮你看见了什么？哪句话让你停下来想了很久？</div>
-    </div>
-    <div class="feedback-option" onclick="setFeedbackType('sage')">
-      <div class="feedback-option-title">📚 推荐一位智者</div>
-      <div class="feedback-option-desc">你认为哪位思想者值得更多人了解，为什么？</div>
-    </div>
-    <div class="feedback-option" onclick="setFeedbackType('question')">
-      <div class="feedback-option-title">🌀 留下一个困惑</div>
-      <div class="feedback-option-desc">有什么问题是你希望某位智者能帮你想清楚的？</div>
-    </div>
-    <div style="height:16px;"></div>
-    <textarea class="feedback-textarea" id="feedback-text" placeholder="写在这里……"></textarea>
-    <button class="btn-primary" onclick="handleFeedbackSubmit()">提交</button>
     <div class="community-box">
       <div class="community-box-title">加入 Ruth 交流群</div>
       <div class="community-box-desc">一群同样在读、在想、在探索的人。一起和凯利对话，互相碰撞，分享有趣的玩法。</div>
@@ -1295,30 +1261,6 @@ function escapeHtml(text) {
 // 滚动到底部
 function scrollToBottom() {
   window.scrollTo(0, document.body.scrollHeight);
-}
-
-function setFeedbackType(type) {
-  const placeholders = {
-    moment: '分享那个让你停下来想了很久的时刻……',
-    sage: '推荐的智者是：\n\n他/她的核心思想是：\n\n我认为他/她值得更多人了解，因为……',
-    question: '我一直在想的一个问题是……'
-  };
-  const ta = document.getElementById('feedback-text');
-  ta.placeholder = placeholders[type] || '写在这里……';
-  ta.focus();
-}
-
-// 提交反馈
-function handleFeedbackSubmit() {
-  const text = document.getElementById('feedback-text').value.trim();
-  if (!text) {
-    alert('请先输入你的反馈内容');
-    return;
-  }
-  // TODO: 实际项目中这里应该发送到后端
-  alert('感谢你的反馈！我们已经收到了。');
-  document.getElementById('feedback-text').value = '';
-  showScreen('screen-home');
 }
 
 // 登录处理
