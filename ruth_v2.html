@@ -599,7 +599,14 @@
   }
 
   /* Feedback */
-  .community-box { background: var(--accent-light); border-radius: 12px; padding: 18px; text-align: center; }
+  .feedback-intro { font-size: 14px; color: var(--text-secondary); line-height: 1.8; margin-bottom: 24px; }
+  .feedback-option {
+    background: var(--surface); border: 1.5px solid var(--border); border-radius: 12px;
+    padding: 16px; margin-bottom: 10px; cursor: default;
+  }
+  .feedback-option-title { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+  .feedback-option-desc { font-size: 13px; color: var(--text-secondary); }
+  .community-box { background: var(--accent-light); border-radius: 12px; padding: 18px; text-align: center; margin-top: 24px; }
   .community-box-title { font-size: 15px; font-weight: 600; margin-bottom: 6px; }
   .community-box-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 14px; }
   .community-qr {
@@ -967,8 +974,23 @@
   </nav>
   <div class="container pb-40">
     <div style="padding: 8px 0 20px">
-      <div style="font-size:20px; font-weight:700; margin-bottom:6px;">反馈与交流</div>
-      <div style="font-size:13px; color:var(--text-secondary);">欢迎加入 Ruth 交流群，一起探索、分享、碰撞。</div>
+      <div style="font-size:20px; font-weight:700; margin-bottom:6px;">你的反馈</div>
+      <div style="font-size:13px; color:var(--text-secondary);">直接决定 Ruth 下一步建设谁、做什么。</div>
+    </div>
+    <div class="feedback-intro">
+      告诉我们你和凯利对话的感受，或者推荐一位你认为值得更多人了解的智者，或者你想用来解决什么困惑。
+    </div>
+    <div class="feedback-option">
+      <div class="feedback-option-title">💡 分享一个被击中的时刻</div>
+      <div class="feedback-option-desc">凯利帮你看见了什么？哪句话让你停下来想了很久？</div>
+    </div>
+    <div class="feedback-option">
+      <div class="feedback-option-title">📚 推荐一位智者</div>
+      <div class="feedback-option-desc">你认为哪位思想者值得更多人了解，为什么？</div>
+    </div>
+    <div class="feedback-option">
+      <div class="feedback-option-title">🌀 留下一个困惑</div>
+      <div class="feedback-option-desc">有什么问题是你希望某位智者能帮你想清楚的？</div>
     </div>
     <div class="community-box">
       <div class="community-box-title">加入 Ruth 交流群</div>
