@@ -628,6 +628,9 @@
 
   /* login */
   .login-screen {
+    position: relative;
+    z-index: 100;
+  }
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -698,6 +701,13 @@
     border-radius: 4px;
     font-size: 11px;
   }
+  .login-screen .btn-primary {
+    cursor: pointer;
+    pointer-events: auto;
+  }
+  .login-screen .btn-primary:active {
+    transform: scale(0.98);
+  }
 </style>
 </head>
 <body>
@@ -720,7 +730,7 @@
       <input type="password" class="login-input" id="login-password" placeholder="输入密码">
     </div>
 
-    <button class="btn-primary" style="width:100%" onclick="handleLogin()">登录</button>
+    <button type="button" class="btn-primary" style="width:100%" onclick="handleLogin()">登录</button>
 
     <div class="login-hint">
       测试账号：<br>
