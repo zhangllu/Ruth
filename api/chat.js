@@ -213,8 +213,7 @@ export default async function handler(req, res) {
           { role: 'user', content: message }
         ],
         max_tokens: 2000,
-        stream: true,
-        thinking: { type: "disabled" }
+        stream: true
       })
     });
 
