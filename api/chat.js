@@ -1,8 +1,8 @@
 export const config = { runtime: 'nodejs' };
 
-// Claude API 配置
-const CLAUDE_API_KEY = 'cr_2ca1503162d42a31b81f3f4bf889bb42aca0a6c54bc77a435b4cd647d407e01b';
-const CLAUDE_API_URL = 'https://drzju.eronmind.com/api/v1/messages';
+// OpenRouter API 配置
+const OPENROUTER_API_KEY = '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';
+const OPENROUTER_API_URL = 'https://openrouter.ai/api/v1/chat/completions';
 
 // 乔治·凯利的 System Prompt
 const KELLY_SYSTEM_PROMPT = `你是乔治·凯利（George Kelly, 1905-1967），美国心理学家，个人建构心理学的创始人。
@@ -90,25 +90,27 @@ export default async function handler(request) {
   try {
     const { message, conversationHistory = [] } = await request.json();
 
-    // 调用 Claude API
-    const response = await fetch(CLAUDE_API_URL, {
+    // 调用 OpenRouter API
+    const response = await fetch(OPENROUTER_API_URL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'x-api-key': CLAUDE_API_KEY,
-        'anthropic-version': '2023-06-01'
+        'Authorization': `Bearer ${OPENROUTER_API_KEY}`
       },
       body: JSON.stringify({
-        model: 'claude-haiku-4-5-20251001',
-        system: KELLY_SYSTEM_PROMPT,
-        messages: conversationHistory.concat([{ role: 'user', content: message }]),
+        model: 'anthropic/claude-haiku-4-5',
+        messages: [
+          { role: 'system', content: KELLY_SYSTEM_PROMPT },
+          ...conversationHistory,
+          { role: 'user', content: message }
+        ],
         max_tokens: 2000
       })
     });
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.error('Claude API 错误:', errorText);
+      console.error('OpenRouter API 错误:', errorText);
       return new Response(JSON.stringify({
         success: false,
         error: `API 调用失败: ${response.status} ${response.statusText}`
@@ -122,7 +124,7 @@ export default async function handler(request) {
 
     return new Response(JSON.stringify({
       success: true,
-      message: data.content[0].text,
+      message: data.choices[0].message.content,
       usage: data.usage
     }), {
       status: 200,
