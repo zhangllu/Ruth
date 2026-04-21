@@ -16,9 +16,24 @@ Ruth 是一个让智者触手可及的对话应用。第一位深度建设的智
 ## 技术栈
 
 - **前端**: 纯 HTML + CSS + JavaScript
-- **后端**: Vercel Edge Functions
-- **AI**: 智谱 AI GLM-4 模型
+- **后端**: Vercel Edge Functions (TypeScript)
+- **AI**: 智谱 AI BigModel (GLM-4)
 - **部署**: Vercel
+
+## 项目结构
+
+```
+Ruth 路思/
+├── api/              # API 接口
+│   └── chat.ts       # 对话接口（智谱 AI）
+├── ruth_v1.html      # 原型版本
+├── ruth_v2.html      # 对话版本（当前生产）
+├── docs/             # 项目文档
+├── archive/          # 历史资料和参考文档
+├── package.json      # 项目配置
+├── vercel.json       # Vercel 部署配置
+└── README.md         # 本文件
+```
 
 ## 本地开发
 
@@ -34,12 +49,9 @@ bun run dev
 
 ## 环境变量
 
-需要配置智谱 API Key：
+智谱 API Key 已配置在 `api/chat.ts` 中（生产环境）。
 
-```bash
-# .env
-ZHIPU_API_KEY=your_api_key_here
-```
+如需更换，编辑 `api/chat.ts` 中的 `ZHIPU_API_KEY`。
 
 ## 部署
 
@@ -50,12 +62,25 @@ bun run deploy
 
 ## 在线访问
 
-https://ruth-delta.vercel.app
+**生产环境**: https://ruth-delta.vercel.app
 
 ## 版本
 
-v 2.0.0 - 实现真实对话功能
+- **v 2.0** - 实现真实对话功能（智谱 AI）
+- **v 1.01** - 凯利原型上线
+
+## 开发说明
+
+### 核心 AI 配置
+
+- **模型**: GLM-4-Flash（免费额度，速度快）
+- **API**: 智谱 AI BigModel
+- **System Prompt**: 完整的凯利人格和理论框架
+
+### 更新对话人格
+
+编辑 `api/chat.ts` 中的 `KELLY_SYSTEM_PROMPT` 常量。
 
 ## 反馈与建议
 
-欢迎通过应用内的反馈功能或 GitHub Issues 提供建议。
+欢迎通过 GitHub Issues 提供建议。

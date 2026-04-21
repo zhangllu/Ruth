@@ -21,3 +21,17 @@
 Network Trash Folder
 Temporary Items
 .apdisk
+
+# Development
+.env
+.env.local
+node_modules
+.vercel
+
+# Archive
+archive/
+
+# Build
+dist
+build
+.cache
