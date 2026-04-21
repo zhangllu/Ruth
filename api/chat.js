@@ -214,7 +214,7 @@ export default async function handler(req, res) {
         ],
         max_tokens: 2000,
         stream: true,
-        thinking: false
+        thinking: { type: "disabled" }
       })
     });
 
