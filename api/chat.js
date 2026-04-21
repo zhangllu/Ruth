@@ -1,6 +1,6 @@
 // 智谱 API 配置（当前使用）
 const ZHIPU_API_KEY = 'fdc08911c8ca4a8e82259a4f5c02ec20.myQCMOzXPMXuk1zB';
-const ZHIPU_API_URL = 'https://open.bigmodel.cn/api/coding/paas/v4/chat/completions';
+const ZHIPU_API_URL = 'https://open.bigmodel.cn/api/paas/v4/chat/completions';
 const ZHIPU_MODEL = 'glm-5.1';
 
 // Claude API 配置（备用）
@@ -213,7 +213,8 @@ export default async function handler(req, res) {
           { role: 'user', content: message }
         ],
         max_tokens: 2000,
-        stream: true
+        stream: true,
+        thinking: { type: 'disabled' }
       })
     });
 
@@ -248,10 +249,6 @@ export default async function handler(req, res) {
           const parsed = JSON.parse(data);
           const delta = parsed.choices?.[0]?.delta;
 
-          // 推理内容（思考过程）
-          if (delta?.reasoning_content) {
-            res.write(`data: ${JSON.stringify({ reasoning: delta.reasoning_content })}\n\n`);
-          }
           // 正常回复内容
           if (delta?.content) {
             res.write(`data: ${JSON.stringify({ text: delta.content })}\n\n`);
