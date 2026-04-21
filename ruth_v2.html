@@ -412,6 +412,12 @@
   }
   .convo-send:hover { opacity: 0.8; }
   .convo-send:disabled { opacity: 0.3; cursor: not-allowed; }
+  .convo-send.stopping {
+    background: var(--bg);
+    border: 2px solid var(--text-primary);
+    color: var(--text-primary);
+  }
+  .convo-send.stopping:hover { background: var(--text-primary); color: white; }
 
   /* Loading indicator */
   .typing-indicator {
@@ -723,7 +729,7 @@
   <div class="convo-footer">
     <div class="convo-input-wrap">
       <textarea class="convo-input" id="convo-input" rows="3"></textarea>
-      <button class="convo-send" id="convo-send" onclick="sendMessage()">↑</button>
+      <button class="convo-send" id="convo-send" onclick="handleSendClick()">↑</button>
     </div>
   </div>
 </div>
@@ -901,6 +907,8 @@
 // 全局状态
 let conversationHistory = [];
 let isLoading = false;
+let abortController = null; // 用于停止生成
+
 
 const API_BASE = window.location.hostname === 'localhost'
   ? 'http://localhost:3000'
@@ -992,11 +1000,16 @@ async function sendMessage(initialMessage = null) {
   }
 
   isLoading = true;
-  sendBtn.disabled = true;
+  sendBtn.disabled = false; // 不禁用，允许点击停止
+  sendBtn.classList.add('stopping');
+  sendBtn.textContent = '■'; // 停止图标
   showLoading();
+
+  abortController = new AbortController();
 
   try {
     const response = await fetch(`${API_BASE}/api/chat`, {
+      signal: abortController.signal,
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -1025,7 +1038,7 @@ async function sendMessage(initialMessage = null) {
 
     while (true) {
       const { done, value } = await reader.read();
-      if (done) break;
+      if (done || abortController?.signal.aborted) break;
 
       buffer += decoder.decode(value, { stream: true });
       const lines = buffer.split('\n');
@@ -1089,6 +1102,22 @@ async function sendMessage(initialMessage = null) {
 
   isLoading = false;
   sendBtn.disabled = false;
+  sendBtn.classList.remove('stopping');
+  sendBtn.textContent = '↑';
+  abortController = null;
+}
+
+// 处理发送按钮点击（发送或停止）
+function handleSendClick() {
+  if (isLoading) {
+    // 正在生成，点击则停止
+    if (abortController) {
+      abortController.abort();
+    }
+  } else {
+    // 没有在生成，发送消息
+    sendMessage();
+  }
 }
 
 // 显示错误
