@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 // 智谱 AI API 配置
-const ZHIPU_API_KEY = process.env.ZHIPU_API_KEY || '6910ad5a9fad4c94b2da8afb97b7b440.EsZdHmN5NeubLGi0';
+const ZHIPU_API_KEY = '6910ad5a9fad4c94b2da8afb97b7b440.EsZdHmN5NeubLGi0';
 const ZHIPU_API_URL = 'https://open.bigmodel.cn/api/paas/v4/chat/completions';
 
 // 乔治·凯利的 System Prompt
