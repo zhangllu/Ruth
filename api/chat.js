@@ -1,3 +1,5 @@
+export const config = { runtime: 'nodejs' };
+
 // Claude API 配置
 const CLAUDE_API_KEY = 'cr_2ca1503162d42a31b81f3f4bf889bb42aca0a6c54bc77a435b4cd647d407e01b';
 const CLAUDE_API_URL = 'https://drzju.eronmind.com/api/v1/messages';
