@@ -17,7 +17,7 @@ Ruth 是一个让智者触手可及的对话应用。第一位深度建设的智
 
 - **前端**: 纯 HTML + CSS + JavaScript
 - **后端**: Vercel Edge Functions (TypeScript)
-- **AI**: 智谱 AI BigModel (GLM-4)
+- **AI**: 智谱 AI BigModel (GLM-5.1)
 - **部署**: Vercel
 
 ## 项目结构
@@ -73,7 +73,7 @@ bun run deploy
 
 ### 核心 AI 配置
 
-- **模型**: GLM-4-Flash（免费额度，速度快）
+- **模型**: GLM-5.1（更强的推理能力和思考模式）
 - **API**: 智谱 AI BigModel
 - **System Prompt**: 完整的凯利人格和理论框架
 

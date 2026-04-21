@@ -1,7 +1,7 @@
 // 智谱 API 配置（当前使用）
 const ZHIPU_API_KEY = 'fdc08911c8ca4a8e82259a4f5c02ec20.myQCMOzXPMXuk1zB';
 const ZHIPU_API_URL = 'https://open.bigmodel.cn/api/coding/paas/v4/chat/completions';
-const ZHIPU_MODEL = 'glm-4.7';
+const ZHIPU_MODEL = 'glm-5.1';
 
 // Claude API 配置（备用）
 // const CLAUDE_API_KEY = 'cr_2ca1503162d42a31b81f3f4bf889bb42aca0a6c54bc77a435b4cd647d407e01b';
