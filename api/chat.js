@@ -1,6 +1,6 @@
-// OpenRouter API 配置
-const OPENROUTER_API_KEY = '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';
-const OPENROUTER_API_URL = 'https://openrouter.ai/api/v1/chat/completions';
+// 智谱 CodingPlan API 配置
+const ZHIPU_API_KEY = 'fdc08911c8ca4a8e82259a4f5c02ec20.myQCMOzXPMXuk1zB';
+const ZHIPU_API_URL = 'https://open.bigmodel.cn/api/coding/paas/v4/chat/completions';
 
 // 乔治·凯利的 System Prompt
 const KELLY_SYSTEM_PROMPT = `你是乔治·凯利（George Kelly, 1905-1967），美国心理学家，个人建构心理学的创始人。
@@ -87,14 +87,14 @@ export default async function handler(req, res) {
     const { message, conversationHistory = [] } = req.body;
 
     // 调用 OpenRouter API
-    const response = await fetch(OPENROUTER_API_URL, {
+    const response = await fetch(ZHIPU_API_URL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${OPENROUTER_API_KEY}`
+        'Authorization': `Bearer ${ZHIPU_API_KEY}`
       },
       body: JSON.stringify({
-        model: 'anthropic/claude-haiku-4-5',
+        model: 'glm-4.7',
         messages: [
           { role: 'system', content: KELLY_SYSTEM_PROMPT },
           ...conversationHistory,
@@ -106,14 +106,16 @@ export default async function handler(req, res) {
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.error('OpenRouter API 错误:', errorText);
+      console.error('智谱 API 错误:', errorText);
       return res.status(500).json({ success: false, error: `API 调用失败: ${response.status}` });
     }
 
     const data = await response.json();
+    const msg = data.choices[0].message;
+    const content = msg.content || msg.reasoning_content || '';
     return res.status(200).json({
       success: true,
-      message: data.choices[0].message.content
+      message: content
     });
 
   } catch (error) {
