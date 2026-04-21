@@ -937,14 +937,19 @@ function addUserMessage(text) {
   scrollToBottom();
 }
 
-// 添加凯利的回复到界面
+// 添加凯利的回复到界面，返回消息内容元素（供流式更新）
 function addSageMessage(text) {
   const body = document.getElementById('convo-body');
-  body.innerHTML += `
-    <div class="convo-sage-label">乔治·凯利</div>
-    <div class="convo-response-text">${formatMessage(text)}</div>
-  `;
+  const label = document.createElement('div');
+  label.className = 'convo-sage-label';
+  label.textContent = '乔治·凯利';
+  const msg = document.createElement('div');
+  msg.className = 'convo-response-text';
+  msg.innerHTML = formatMessage(text);
+  body.appendChild(label);
+  body.appendChild(msg);
   scrollToBottom();
+  return msg;
 }
 
 // 显示加载状态
@@ -995,18 +1000,50 @@ async function sendMessage(initialMessage = null) {
       })
     });
 
-    const data = await response.json();
+    if (!response.ok) {
+      hideLoading();
+      showError('对话失败，请稍后重试');
+      isLoading = false;
+      sendBtn.disabled = false;
+      return;
+    }
 
+    // 流式读取，边收边显示
     hideLoading();
+    const msgEl = addSageMessage('');
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder();
+    let fullText = '';
+    let buffer = '';
 
-    if (data.success) {
-      addSageMessage(data.message);
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+
+      buffer += decoder.decode(value, { stream: true });
+      const lines = buffer.split('\n');
+      buffer = lines.pop();
+
+      for (const line of lines) {
+        if (!line.startsWith('data: ')) continue;
+        const data = line.slice(6);
+        if (data === '[DONE]') continue;
+        try {
+          const parsed = JSON.parse(data);
+          if (parsed.text) {
+            fullText += parsed.text;
+            msgEl.innerHTML = formatMessage(fullText);
+            scrollToBottom();
+          }
+        } catch {}
+      }
+    }
+
+    if (fullText) {
       conversationHistory.push(
         { role: 'user', content: text },
-        { role: 'assistant', content: data.message }
+        { role: 'assistant', content: fullText }
       );
-    } else {
-      showError(data.error || '对话失败，请稍后重试');
     }
 
   } catch (error) {

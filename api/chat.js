@@ -179,16 +179,15 @@ const KELLY_SYSTEM_PROMPT = `你是乔治·凯利（George Kelly, 1905-1967）�
 现在开始对话。`;
 
 export default async function handler(req, res) {
-  res.setHeader('Content-Type', 'application/json');
-
   if (req.method !== 'POST') {
+    res.setHeader('Content-Type', 'application/json');
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
   try {
     const { message, conversationHistory = [] } = req.body;
 
-    // 调用 Claude API
+    // 调用 Claude API（流式）
     const response = await fetch(CLAUDE_API_URL, {
       method: 'POST',
       headers: {
@@ -203,24 +202,55 @@ export default async function handler(req, res) {
           ...conversationHistory,
           { role: 'user', content: message }
         ],
-        max_tokens: 2000
+        max_tokens: 2000,
+        stream: true
       })
     });
 
     if (!response.ok) {
       const errorText = await response.text();
       console.error('Claude API 错误:', errorText);
+      res.setHeader('Content-Type', 'application/json');
       return res.status(500).json({ success: false, error: `API 调用失败: ${response.status}` });
     }
 
-    const data = await response.json();
-    return res.status(200).json({
-      success: true,
-      message: data.content[0].text
-    });
+    // 转发 SSE 流给前端
+    res.setHeader('Content-Type', 'text/event-stream');
+    res.setHeader('Cache-Control', 'no-cache');
+    res.setHeader('Connection', 'keep-alive');
+
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder();
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+
+      const chunk = decoder.decode(value, { stream: true });
+      const lines = chunk.split('\n');
+
+      for (const line of lines) {
+        if (!line.startsWith('data: ')) continue;
+        const data = line.slice(6);
+        if (data === '[DONE]') continue;
+
+        try {
+          const parsed = JSON.parse(data);
+          if (parsed.type === 'content_block_delta' && parsed.delta?.type === 'text_delta') {
+            res.write(`data: ${JSON.stringify({ text: parsed.delta.text })}\n\n`);
+          }
+        } catch {}
+      }
+    }
+
+    res.write('data: [DONE]\n\n');
+    res.end();
 
   } catch (error) {
     console.error('对话 API 错误:', error);
-    return res.status(500).json({ success: false, error: error.message || '未知错误' });
+    if (!res.headersSent) {
+      res.setHeader('Content-Type', 'application/json');
+      res.status(500).json({ success: false, error: error.message || '未知错误' });
+    }
   }
 }
