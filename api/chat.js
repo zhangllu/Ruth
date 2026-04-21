@@ -1,7 +1,12 @@
-// Claude API 配置
-const CLAUDE_API_KEY = 'cr_2ca1503162d42a31b81f3f4bf889bb42aca0a6c54bc77a435b4cd647d407e01b';
-const CLAUDE_API_URL = 'https://drzju.eronmind.com/api/v1/messages';
-const CLAUDE_MODEL = 'claude-sonnet-4-6';
+// 智谱 API 配置（当前使用）
+const ZHIPU_API_KEY = 'fdc08911c8ca4a8e82259a4f5c02ec20.myQCMOzXPMXuk1zB';
+const ZHIPU_API_URL = 'https://open.bigmodel.cn/api/coding/paas/v4/chat/completions';
+const ZHIPU_MODEL = 'glm-4.7';
+
+// Claude API 配置（备用）
+// const CLAUDE_API_KEY = 'cr_2ca1503162d42a31b81f3f4bf889bb42aca0a6c54bc77a435b4cd647d407e01b';
+// const CLAUDE_API_URL = 'https://drzju.eronmind.com/api/v1/messages';
+// const CLAUDE_MODEL = 'claude-sonnet-4-6';
 
 // 乔治·凯利的 System Prompt（原版，保留对比用）
 const KELLY_SYSTEM_PROMPT_V1 = `你是乔治·凯利（George Kelly, 1905-1967），美国心理学家，个人建构心理学的创始人。
@@ -185,18 +190,17 @@ export default async function handler(req, res) {
   try {
     const { message, conversationHistory = [] } = req.body;
 
-    // 调用 Claude API（流式）
-    const response = await fetch(CLAUDE_API_URL, {
+    // 调用智谱 API（流式）
+    const response = await fetch(ZHIPU_API_URL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'x-api-key': CLAUDE_API_KEY,
-        'anthropic-version': '2023-06-01'
+        'Authorization': `Bearer ${ZHIPU_API_KEY}`
       },
       body: JSON.stringify({
-        model: CLAUDE_MODEL,
-        system: KELLY_SYSTEM_PROMPT,
+        model: ZHIPU_MODEL,
         messages: [
+          { role: 'system', content: KELLY_SYSTEM_PROMPT },
           ...conversationHistory,
           { role: 'user', content: message }
         ],
@@ -207,7 +211,7 @@ export default async function handler(req, res) {
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.error('Claude API 错误:', errorText);
+      console.error('智谱 API 错误:', errorText);
       res.setHeader('Content-Type', 'application/json');
       return res.status(500).json({ success: false, error: `API 调用失败: ${response.status}` });
     }
@@ -234,8 +238,9 @@ export default async function handler(req, res) {
 
         try {
           const parsed = JSON.parse(data);
-          if (parsed.type === 'content_block_delta' && parsed.delta?.type === 'text_delta') {
-            res.write(`data: ${JSON.stringify({ text: parsed.delta.text })}\n\n`);
+          const text = parsed.choices?.[0]?.delta?.content;
+          if (text) {
+            res.write(`data: ${JSON.stringify({ text })}\n\n`);
           }
         } catch {}
       }
