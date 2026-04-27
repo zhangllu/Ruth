@@ -86,6 +86,7 @@ export async function POST(req: Request) {
         const reader = response.body!.getReader()
         const decoder = new TextDecoder()
         let totalTokensThisTurn = 0
+        let totalChars = 0
 
         try {
           while (true) {
@@ -110,6 +111,7 @@ export async function POST(req: Request) {
                 }
 
                 if (delta?.content) {
+                  totalChars += delta.content.length
                   controller.enqueue(
                     new TextEncoder().encode(
                       JSON.stringify({ text: delta.content }) + "\n"
@@ -123,21 +125,29 @@ export async function POST(req: Request) {
           }
         } catch (err) {
           console.error("流读取错误:", err)
-        } finally {
-          controller.close()
+        }
 
-          // 更新用户的 token 使用量
-          if (totalTokensThisTurn > 0) {
-            try {
-              await db
-                .update(user)
-                .set({ usedTokens: sql`${user.usedTokens} + ${totalTokensThisTurn}` })
-                .where(eq(user.id, session.user.id))
-            } catch (err) {
-              console.error("更新 token 用量失败:", err)
-            }
+        // 如果 API 没返回 usage，用字符数估算（中文约 1.8 字符/token）
+        if (totalTokensThisTurn === 0 && totalChars > 0) {
+          const promptTokens = message.length + conversationHistory.reduce((sum: number, m: ChatMessage) => sum + m.content.length, 0)
+          totalTokensThisTurn = Math.ceil(promptTokens / 1.8) + Math.ceil(totalChars / 1.8)
+          console.log(`[token] 改用估算: ${totalChars} 字符 → ${totalTokensThisTurn} tokens`)
+        }
+
+        // 在关闭流之前更新 token 用量（Vercel 在流关闭后可能终止函数）
+        if (totalTokensThisTurn > 0) {
+          try {
+            await db
+              .update(user)
+              .set({ usedTokens: sql`${user.usedTokens} + ${totalTokensThisTurn}` })
+              .where(eq(user.id, session.user.id))
+            console.log(`[token] 数据库已更新: +${totalTokensThisTurn} (user: ${session.user.id})`)
+          } catch (err) {
+            console.error("更新 token 用量失败:", err)
           }
         }
+
+        controller.close()
       },
     })
 

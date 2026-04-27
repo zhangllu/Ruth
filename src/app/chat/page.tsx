@@ -119,7 +119,7 @@ function ConversationSidebar({
 
 export default function ChatPage() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
-  const { data: session, isPending } = useSession()
+  const { data: session, isPending, refetch } = useSession()
   const router = useRouter()
 
   useEffect(() => {
@@ -127,6 +127,15 @@ export default function ChatPage() {
       router.replace("/login")
     }
   }, [session, isPending, router])
+
+  // 每 15 秒刷新会话数据（更新 token 配额显示）
+  useEffect(() => {
+    if (!session) return
+    const id = setInterval(() => {
+      refetch()
+    }, 15000)
+    return () => clearInterval(id)
+  }, [session, refetch])
 
   if (isPending) {
     return (
