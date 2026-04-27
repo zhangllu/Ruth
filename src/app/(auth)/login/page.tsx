@@ -39,19 +39,25 @@ export default function LoginPage() {
       return
     }
     setLoading(true)
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { error } = await (authClient as any).sendVerificationOTP({
-      email,
-      type: "sign-in",
-    })
-    setLoading(false)
-    if (error) {
-      toast.error(error.message || "发送验证码失败")
-      return
+    try {
+      const res = await fetch("/api/auth/email-otp/send-verification-otp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, type: "sign-in" }),
+      })
+      const data = await res.json()
+      if (!res.ok || data.error) {
+        toast.error(data.error || data.message || "发送验证码失败")
+        setLoading(false)
+        return
+      }
+      setOtpSent(true)
+      startCountdown()
+      toast.success("验证码已发送")
+    } catch {
+      toast.error("发送验证码失败")
     }
-    setOtpSent(true)
-    startCountdown()
-    toast.success("验证码已发送")
+    setLoading(false)
   }
 
   const handleOtpLogin = async (e: React.FormEvent) => {
@@ -61,18 +67,24 @@ export default function LoginPage() {
       return
     }
     setLoading(true)
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { error } = await (authClient as any).signIn.emailOTP({
-      email,
-      otp,
-    })
-    if (error) {
-      toast.error(error.message || "登录失败")
-      setLoading(false)
-      return
+    try {
+      const res = await fetch("/api/auth/sign-in/email-otp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, otp }),
+      })
+      const data = await res.json()
+      if (!res.ok || data.error) {
+        toast.error(data.error || data.message || "登录失败")
+        setLoading(false)
+        return
+      }
+      toast.success("登录成功")
+      router.push("/chat")
+    } catch {
+      toast.error("登录失败")
     }
-    toast.success("登录成功")
-    router.push("/chat")
+    setLoading(false)
   }
 
   const handlePasswordLogin = async (e: React.FormEvent) => {
