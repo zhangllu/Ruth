@@ -2,7 +2,7 @@
 
 import { useSearchParams } from "next/navigation"
 import { useEffect, useState, Suspense } from "react"
-import { decodeShareData, type SharedMessage } from "@/lib/share-utils"
+import { fetchSharedMessages, type SharedMessage } from "@/lib/share-utils"
 import { ArrowLeft } from "lucide-react"
 import Link from "next/link"
 
@@ -12,12 +12,12 @@ function ShareContent() {
   const [error, setError] = useState(false)
 
   useEffect(() => {
-    const data = searchParams.get("d")
-    if (!data) {
+    const id = searchParams.get("id")
+    if (!id) {
       setError(true)
       return
     }
-    decodeShareData(data)
+    fetchSharedMessages(id)
       .then((msgs) => setMessages(msgs))
       .catch(() => setError(true))
   }, [searchParams])

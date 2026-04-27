@@ -5,7 +5,7 @@ import { useChatStore } from "@/lib/stores/chat-store"
 import { ChatMessage } from "./chat-message"
 import { Share2, X } from "lucide-react"
 import { toast } from "sonner"
-import { encodeShareData, buildShareUrl } from "@/lib/share-utils"
+import { shareMessages, buildShareUrl } from "@/lib/share-utils"
 
 export function ChatList() {
   const { currentConversationId, conversations, isStreaming, streamingContent } = useChatStore()
@@ -45,15 +45,14 @@ export function ChatList() {
       return
     }
     try {
-      const data = await encodeShareData(
-        selected.map((m) => ({ role: m.role as "user" | "assistant", content: m.content }))
-      )
-      const url = buildShareUrl(data)
+      const messages = selected.map((m) => ({ role: m.role as "user" | "assistant", content: m.content }))
+      const id = await shareMessages(messages)
+      const url = buildShareUrl(id)
       await navigator.clipboard.writeText(url)
       toast.success("分享链接已复制到剪贴板")
       clearSelection()
     } catch (e) {
-      toast.error("对话太长，无法分享。请选择更少的消息。")
+      toast.error("分享失败，请稍后重试。")
     }
   }, [currentConv, selectedIds, clearSelection])
 
@@ -128,7 +127,7 @@ export function ChatList() {
   }
 
   return (
-    <div className="flex-1 flex flex-col relative">
+    <>
       <div ref={scrollRef} className="flex-1 overflow-y-auto scrollbar-thin px-4 py-6">
         <div className="mx-auto max-w-3xl flex flex-col gap-4">
           {currentConv.messages.map((msg) => (
@@ -173,27 +172,29 @@ export function ChatList() {
 
       {/* 选中浮层工具栏 */}
       {hasSelection && !isStreaming && (
-        <div className="sticky bottom-0 mx-auto mb-4 flex items-center gap-3 rounded-full border border-border bg-bg-card px-4 py-2 shadow-lg">
-          <span className="text-sm text-fg-muted whitespace-nowrap">
-            已选择 <span className="font-medium text-fg">{selectedIds.size}</span> 条
-          </span>
-          <div className="w-px h-4 bg-border" />
-          <button
-            onClick={handleShare}
-            className="flex items-center gap-1.5 text-sm text-primary-600 hover:text-primary-700 transition-colors"
-          >
-            <Share2 className="w-4 h-4" />
-            分享
-          </button>
-          <button
-            onClick={clearSelection}
-            className="flex items-center gap-1.5 text-sm text-fg-muted hover:text-fg transition-colors"
-          >
-            <X className="w-4 h-4" />
-            取消
-          </button>
+        <div className="flex justify-center -mt-14 pb-2 relative z-10 pointer-events-none">
+          <div className="pointer-events-auto flex items-center gap-3 rounded-full border border-border bg-bg-card px-4 py-2 shadow-lg">
+            <span className="text-sm text-fg-muted whitespace-nowrap">
+              已选择 <span className="font-medium text-fg">{selectedIds.size}</span> 条
+            </span>
+            <div className="w-px h-4 bg-border" />
+            <button
+              onClick={handleShare}
+              className="flex items-center gap-1.5 text-sm text-primary-600 hover:text-primary-700 transition-colors"
+            >
+              <Share2 className="w-4 h-4" />
+              分享
+            </button>
+            <button
+              onClick={clearSelection}
+              className="flex items-center gap-1.5 text-sm text-fg-muted hover:text-fg transition-colors"
+            >
+              <X className="w-4 h-4" />
+              取消
+            </button>
+          </div>
         </div>
       )}
-    </div>
+    </>
   )
 }
