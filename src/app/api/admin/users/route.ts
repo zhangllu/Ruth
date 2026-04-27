@@ -9,6 +9,7 @@ export async function GET(req: Request) {
     if (!session) {
       return Response.json({ error: "未登录" }, { status: 401 })
     }
+
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     if ((session.user as any).role !== "admin") {
       return Response.json({ error: "无权限" }, { status: 403 })

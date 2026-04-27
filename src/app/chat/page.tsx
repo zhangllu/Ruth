@@ -130,6 +130,7 @@ function ConversationSidebar({
 export default function ChatPage() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const { data: session, isPending, refetch } = useSession()
+  const [isAdmin, setIsAdmin] = useState(false)
   const router = useRouter()
 
   useEffect(() => {
@@ -146,6 +147,15 @@ export default function ChatPage() {
     }, 15000)
     return () => clearInterval(id)
   }, [session, refetch])
+
+  // 检查管理员权限
+  useEffect(() => {
+    if (!session) return
+    fetch("/api/admin/users/me")
+      .then((res) => res.json())
+      .then((data) => setIsAdmin(data.admin))
+      .catch(() => setIsAdmin(false))
+  }, [session])
 
   if (isPending) {
     return (
@@ -170,7 +180,7 @@ export default function ChatPage() {
               onClose={() => {}}
               usedTokens={(session.user as Record<string, unknown>).usedTokens as number}
               totalTokens={(session.user as Record<string, unknown>).totalTokens as number}
-              isAdmin={(session.user as Record<string, unknown>).role === "admin"}
+              isAdmin={isAdmin}
             />
           </aside>
 
@@ -200,7 +210,7 @@ export default function ChatPage() {
                 onClose={() => setSidebarOpen(false)}
                 usedTokens={(session.user as Record<string, unknown>).usedTokens as number}
                 totalTokens={(session.user as Record<string, unknown>).totalTokens as number}
-                isAdmin={(session.user as Record<string, unknown>).role === "admin"}
+                isAdmin={isAdmin}
               />
             </SheetContent>
           </Sheet>
