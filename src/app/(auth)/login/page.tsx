@@ -9,7 +9,7 @@ import { toast } from "sonner"
 type LoginMode = "otp" | "password"
 
 export default function LoginPage() {
-  const [mode, setMode] = useState<LoginMode>("otp")
+  const [mode, setMode] = useState<LoginMode>("password")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [otp, setOtp] = useState("")

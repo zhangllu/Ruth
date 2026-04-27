@@ -20,6 +20,7 @@ export default function AdminPage() {
   const router = useRouter()
   const [users, setUsers] = useState<UserRecord[]>([])
   const [loading, setLoading] = useState(true)
+  const [checking, setChecking] = useState(true)
 
   useEffect(() => {
     if (isPending) return
@@ -27,12 +28,20 @@ export default function AdminPage() {
       router.replace("/login")
       return
     }
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    if ((session.user as any).role !== "admin") {
-      router.replace("/chat")
-      return
-    }
-    fetchUsers()
+    // 先确认管理员身份再加载数据
+    fetch("/api/admin/users/me")
+      .then((r) => r.json())
+      .then((data) => {
+        if (!data.admin) {
+          router.replace("/chat")
+          return
+        }
+        setChecking(false)
+        fetchUsers()
+      })
+      .catch(() => {
+        router.replace("/chat")
+      })
   }, [session, isPending, router])
 
   const fetchUsers = async () => {
@@ -46,13 +55,15 @@ export default function AdminPage() {
     setLoading(false)
   }
 
-  if (isPending || !session) {
+  if (isPending || checking) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-bg">
         <div className="text-sm text-fg-muted">加载中…</div>
       </div>
     )
   }
+
+  if (!session) return null
 
   return (
     <div className="min-h-screen bg-bg">
