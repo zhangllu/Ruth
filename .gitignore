@@ -46,5 +46,17 @@ build/
 archive/
 archieve/
 
+# TypeScript
+next-env.d.ts
+tsconfig.tsbuildinfo
+
+# 参考书籍（非源码）
+心理治疗中的首次访谈*/
+心理治疗师的刻意练习*/
+整合疗法*/
+
+# 学生项目模板
+project-template-student-deploy_zl/
+
 # 个人习惯忽略
 source

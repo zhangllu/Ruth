@@ -4,7 +4,7 @@ import { useChatStore } from "@/lib/stores/chat-store"
 import { ChatList } from "@/components/chat/chat-list"
 import { ChatInput } from "@/components/chat/chat-input"
 import { Button } from "@/components/ui/button"
-import { Sidebar, MessageSquarePlus, Trash2, Badge } from "lucide-react"
+import { Sidebar, MessageSquarePlus, Trash2 } from "lucide-react"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { Header } from "@/components/layout/header"
 import { Footer } from "@/components/layout/footer"
@@ -74,21 +74,13 @@ function ConversationSidebar({
           ))
         )}
       </div>
-      <div className="p-3 border-t border-border">
-        {useChatStore.getState().useMockMode && (
-          <div className="flex items-center gap-2 text-xs text-amber-600">
-            <Badge className="w-2 h-2 fill-amber-500" />
-            <span>演示模式</span>
-          </div>
-        )}
-      </div>
+      <div className="p-3 border-t border-border" />
     </div>
   )
 }
 
 export default function ChatPage() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
-  const { useMockMode } = useChatStore()
 
   return (
     <div className="flex flex-col h-screen">
@@ -110,11 +102,6 @@ export default function ChatPage() {
               <span className="text-sm font-medium text-fg">
                 {useChatStore.getState().getCurrentConversation()?.title || "新对话"}
               </span>
-              {useMockMode && (
-                <span className="text-xs px-2 py-0.5 rounded-full border border-amber-300 text-amber-600">
-                  🎭 演示模式
-                </span>
-              )}
             </div>
             <ChatList />
             <ChatInput />

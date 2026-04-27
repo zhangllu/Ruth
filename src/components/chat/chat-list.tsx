@@ -6,14 +6,14 @@ import { ChatMessage } from "./chat-message"
 import { ScrollArea } from "@/components/ui/scroll-area"
 
 export function ChatList() {
-  const { currentConversationId, conversations, isStreaming } = useChatStore()
+  const { currentConversationId, conversations, isStreaming, streamingContent } = useChatStore()
   const currentConv = conversations.find((c) => c.id === currentConversationId)
   const bottomRef = useRef<HTMLDivElement>(null)
   const scrollRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" })
-  }, [currentConv?.messages.length])
+  }, [currentConv?.messages.length, streamingContent])
 
   if (!currentConv || currentConv.messages.length === 0) {
     return (
@@ -89,7 +89,20 @@ export function ChatList() {
         {currentConv.messages.map((msg) => (
           <ChatMessage key={msg.id} message={msg} />
         ))}
-        {isStreaming && (
+
+        {/* 流式回复气泡 */}
+        {isStreaming && streamingContent && (
+          <ChatMessage
+            message={{
+              id: "streaming",
+              role: "assistant",
+              content: streamingContent,
+            }}
+          />
+        )}
+
+        {/* 流式加载指示器（刚启动还未收到内容时） */}
+        {isStreaming && !streamingContent && (
           <div className="flex gap-3">
             <div className="flex-shrink-0 w-8 h-8 rounded-full bg-accent-100 flex items-center justify-center">
               <span className="text-xs">🧑‍🏫</span>
@@ -103,6 +116,7 @@ export function ChatList() {
             </div>
           </div>
         )}
+
         <div ref={bottomRef} />
       </div>
     </div>

@@ -6,15 +6,16 @@ import { MOCK_CONVERSATIONS, type Conversation, type Message } from "@/data/mock
 interface ChatState {
   conversations: Conversation[]
   currentConversationId: string | null
-  useMockMode: boolean
   isStreaming: boolean
+  streamingContent: string
 
   createConversation: () => string
   deleteConversation: (id: string) => void
   setCurrentConversation: (id: string | null) => void
   addMessage: (conversationId: string, message: Omit<Message, "id" | "createdAt">) => void
   setStreaming: (streaming: boolean) => void
-  setMockMode: (mock: boolean) => void
+  setStreamingContent: (content: string) => void
+  appendStreamingContent: (chunk: string) => void
   getCurrentConversation: () => Conversation | undefined
 }
 
@@ -23,8 +24,8 @@ export const useChatStore = create<ChatState>()(
     (set, get) => ({
       conversations: MOCK_CONVERSATIONS,
       currentConversationId: null,
-      useMockMode: true,
       isStreaming: false,
+      streamingContent: "",
 
       createConversation: () => {
         const id = uuidv4()
@@ -76,7 +77,10 @@ export const useChatStore = create<ChatState>()(
 
       setStreaming: (streaming) => set({ isStreaming: streaming }),
 
-      setMockMode: (mock) => set({ useMockMode: mock }),
+      setStreamingContent: (content) => set({ streamingContent: content }),
+
+      appendStreamingContent: (chunk) =>
+        set((s) => ({ streamingContent: s.streamingContent + chunk })),
 
       getCurrentConversation: () => {
         const { conversations, currentConversationId } = get()
@@ -86,6 +90,18 @@ export const useChatStore = create<ChatState>()(
     {
       name: "ask-kelly-chat",
       storage: createJSONStorage(() => localStorage),
+      // 只持久化对话数据
+      partialize: (state) => ({
+        conversations: state.conversations,
+        currentConversationId: state.currentConversationId,
+      }),
+      // 确保流式状态永远从初始值开始，不受 localStorage 影响
+      merge: (persisted, current) => ({
+        ...current,
+        ...(persisted as Partial<ChatState>),
+        isStreaming: false,
+        streamingContent: "",
+      }),
     }
   )
 )
