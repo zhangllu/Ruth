@@ -1,8 +1,8 @@
 {
-  "zh_title": "Ruth 路思 - 与智者对话",
-  "zh_description": "让智慧不再遥远，持续滋养你。第一位深度建设的智者是乔治·凯利，个人建构心理学创始人。",
-  "title": "Ruth - Conversations with Wisdom",
-  "version": "1.01",
-  "author": "Ruth Team",
-  "tags": ["心理学", "凯利", "个人建构", "对话", "智慧"]
+  "zh_title": "问凯利",
+  "zh_description": "和凯利对话，看见自己建构的世界。包含凯利介绍、个人建构心理学、系列文章和 AI 对话功能。",
+  "title": "Ask Kelly",
+  "version": "2.0",
+  "author": "随机漫步",
+  "tags": ["凯利", "个人建构心理学", "George Kelly", "AI对话", "心理学"]
 }

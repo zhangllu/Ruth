@@ -1,0 +1,212 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  /* 间距 */
+  --spacing-1: 0.25rem;
+  --spacing-2: 0.5rem;
+  --spacing-3: 0.75rem;
+  --spacing-4: 1rem;
+  --spacing-6: 1.5rem;
+  --spacing-8: 2rem;
+  --spacing-12: 3rem;
+  --spacing-16: 4rem;
+
+  /* 圆角 */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-full: 9999px;
+
+  /* 阴影 */
+  --shadow-sm: 0 1px 2px oklch(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px oklch(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px oklch(0 0 0 / 0.1);
+  --shadow-xl: 0 20px 25px oklch(0 0 0 / 0.15);
+
+  /* ===== 自定义颜色（light） ===== */
+  /* 背景 & 前景 */
+  --color-bg: oklch(0.98 0.005 250);
+  --color-bg-card: oklch(1 0 0);
+  --color-bg-muted: oklch(0.96 0.005 250);
+  --color-fg: oklch(0.15 0.02 250);
+  --color-fg-muted: oklch(0.55 0.02 250);
+  --color-border-light: oklch(0.90 0.01 250);
+
+  /* 主色调 — 紫蓝（心理学深度 + AI 智能感）hue: 250° */
+  --color-primary-50:  oklch(0.95 0.03 250);
+  --color-primary-100: oklch(0.90 0.05 250);
+  --color-primary-200: oklch(0.80 0.08 250);
+  --color-primary-300: oklch(0.70 0.12 250);
+  --color-primary-400: oklch(0.60 0.15 250);
+  --color-primary-500: oklch(0.50 0.16 250);
+  --color-primary-600: oklch(0.40 0.14 250);
+  --color-primary-700: oklch(0.32 0.12 250);
+  --color-primary-800: oklch(0.25 0.09 250);
+  --color-primary-900: oklch(0.18 0.06 250);
+
+  /* 强调色 — 暖橙（人文温度）hue: 30° */
+  --color-accent-50:  oklch(0.95 0.04 30);
+  --color-accent-100: oklch(0.90 0.06 30);
+  --color-accent-200: oklch(0.82 0.09 30);
+  --color-accent-300: oklch(0.74 0.12 30);
+  --color-accent-400: oklch(0.66 0.14 30);
+  --color-accent-500: oklch(0.58 0.14 30);
+  --color-accent-600: oklch(0.50 0.13 30);
+  --color-accent-700: oklch(0.42 0.12 30);
+  --color-accent-800: oklch(0.35 0.10 30);
+  --color-accent-900: oklch(0.28 0.08 30);
+
+  /* shadcn/ui 变量映射到自定义颜色 */
+  --color-background: var(--color-bg);
+  --color-foreground: var(--color-fg);
+  --color-card: var(--color-bg-card);
+  --color-card-foreground: var(--color-fg);
+  --color-popover: var(--color-bg-card);
+  --color-popover-foreground: var(--color-fg);
+  --color-primary: var(--color-primary-600);
+  --color-primary-foreground: oklch(0.98 0.01 250);
+  --color-secondary: var(--color-primary-50);
+  --color-secondary-foreground: var(--color-primary-800);
+  --color-muted: var(--color-bg-muted);
+  --color-muted-foreground: var(--color-fg-muted);
+  --color-accent: var(--color-accent-100);
+  --color-accent-foreground: var(--color-accent-700);
+  --color-destructive: oklch(0.55 0.18 25);
+  --color-border: var(--color-border-light);
+  --color-input: var(--color-border-light);
+  --color-ring: var(--color-primary-300);
+  --color-chart-1: var(--color-primary-500);
+  --color-chart-2: var(--color-accent-500);
+  --color-chart-3: oklch(0.60 0.15 150);
+  --color-chart-4: oklch(0.65 0.14 280);
+  --color-chart-5: oklch(0.70 0.16 80);
+  --color-sidebar: var(--color-bg-card);
+  --color-sidebar-foreground: var(--color-fg);
+  --color-sidebar-primary: var(--color-primary-600);
+  --color-sidebar-primary-foreground: oklch(0.98 0.01 250);
+  --color-sidebar-accent: var(--color-primary-50);
+  --color-sidebar-accent-foreground: var(--color-primary-800);
+  --color-sidebar-border: var(--color-border-light);
+  --color-sidebar-ring: var(--color-primary-300);
+
+  --radius: 0.625rem;
+}
+
+/* 字体（不放在 @theme 中，因为变量名不符 --font-xxx 模式） */
+:root {
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "PingFang SC",
+    "Microsoft YaHei", "Noto Sans SC", sans-serif;
+  --font-serif: "Noto Serif SC", Georgia, "Songti SC", serif;
+  --font-mono: "SF Mono", "Fira Code", "JetBrains Mono", monospace;
+}
+
+/* 暗色模式：覆盖所有自定义颜色变量 */
+.dark {
+  --color-bg: oklch(0.12 0.02 250);
+  --color-bg-card: oklch(0.18 0.02 250);
+  --color-bg-muted: oklch(0.15 0.02 250);
+  --color-fg: oklch(0.92 0.01 250);
+  --color-fg-muted: oklch(0.60 0.02 250);
+  --color-border-light: oklch(0.25 0.02 250);
+
+  --color-primary-50:  oklch(0.18 0.06 250);
+  --color-primary-100: oklch(0.25 0.09 250);
+  --color-primary-200: oklch(0.32 0.12 250);
+  --color-primary-300: oklch(0.40 0.14 250);
+  --color-primary-400: oklch(0.50 0.16 250);
+  --color-primary-500: oklch(0.60 0.15 250);
+  --color-primary-600: oklch(0.70 0.12 250);
+  --color-primary-700: oklch(0.80 0.08 250);
+  --color-primary-800: oklch(0.90 0.05 250);
+  --color-primary-900: oklch(0.95 0.03 250);
+
+  --color-accent-50:  oklch(0.28 0.08 30);
+  --color-accent-100: oklch(0.35 0.10 30);
+  --color-accent-200: oklch(0.42 0.12 30);
+  --color-accent-300: oklch(0.50 0.13 30);
+  --color-accent-400: oklch(0.58 0.14 30);
+  --color-accent-500: oklch(0.66 0.14 30);
+  --color-accent-600: oklch(0.74 0.12 30);
+  --color-accent-700: oklch(0.82 0.09 30);
+  --color-accent-800: oklch(0.90 0.06 30);
+  --color-accent-900: oklch(0.95 0.04 30);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-bg text-fg;
+  }
+  html {
+    @apply font-sans;
+  }
+}
+
+/* ===== Markdown 内容样式 ===== */
+.prose-kelly {
+  --tw-prose-body: var(--color-fg);
+  --tw-prose-headings: var(--color-fg);
+  --tw-prose-bold: var(--color-fg);
+  --tw-prose-quotes: var(--color-primary-700);
+  --tw-prose-code: var(--color-fg);
+  --tw-prose-hr: var(--color-border-light);
+}
+
+.prose-kelly h1 { font-size: 1.5rem; font-weight: 700; margin-top: 2rem; margin-bottom: 1rem; line-height: 1.3; }
+.prose-kelly h2 { font-size: 1.25rem; font-weight: 600; margin-top: 1.5rem; margin-bottom: 0.75rem; line-height: 1.35; }
+.prose-kelly h3 { font-size: 1.125rem; font-weight: 600; margin-top: 1.25rem; margin-bottom: 0.5rem; }
+.prose-kelly p { margin-bottom: 1rem; line-height: 1.75; }
+.prose-kelly ul { list-style-type: disc; padding-left: 1.5rem; margin-bottom: 1rem; }
+.prose-kelly ol { list-style-type: decimal; padding-left: 1.5rem; margin-bottom: 1rem; }
+.prose-kelly li { margin-bottom: 0.25rem; line-height: 1.75; }
+.prose-kelly blockquote { border-left: 3px solid var(--color-primary-300); padding-left: 1rem; margin: 1rem 0; color: var(--color-primary-700); font-style: italic; }
+.prose-kelly strong { font-weight: 600; }
+.prose-kelly code { font-family: var(--font-mono); font-size: 0.875rem; background: var(--color-bg-muted); padding: 0.125rem 0.375rem; border-radius: 0.25rem; }
+.prose-kelly pre { background: var(--color-bg-muted); padding: 1rem; border-radius: 0.5rem; overflow-x: auto; margin-bottom: 1rem; }
+.prose-kelly pre code { background: none; padding: 0; }
+.prose-kelly hr { border-color: var(--color-border-light); margin: 2rem 0; }
+.prose-kelly table { width: 100%; border-collapse: collapse; margin-bottom: 1rem; }
+.prose-kelly th { text-align: left; font-weight: 600; padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--color-border-light); }
+.prose-kelly td { padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--color-border-light); }
+
+/* 打字指示器动画 */
+@keyframes typing-dot {
+  0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+  30% { transform: translateY(-4px); opacity: 1; }
+}
+
+.typing-dot {
+  animation: typing-dot 1.4s ease-in-out infinite;
+}
+.typing-dot:nth-child(1) { animation-delay: 0s; }
+.typing-dot:nth-child(2) { animation-delay: 0.2s; }
+.typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+/* 滚动条样式 */
+.scrollbar-thin::-webkit-scrollbar {
+  width: 4px;
+}
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: var(--color-border-light);
+  border-radius: 2px;
+}
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: var(--color-fg-muted);
+}
+
+/* 欢迎卡片建议问题按钮 */
+.suggestion-btn {
+  @apply px-3 py-2 text-sm rounded-lg border border-border text-fg-muted
+    hover:border-primary-300 hover:text-primary-600 hover:bg-primary-50
+    transition-colors duration-150 cursor-pointer text-left;
+}
