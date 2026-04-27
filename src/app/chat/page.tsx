@@ -9,8 +9,10 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { Header } from "@/components/layout/header"
 import { Footer } from "@/components/layout/footer"
 import { useState, useEffect } from "react"
-import { useSession } from "@/lib/auth-client"
+import { useSession, signOut } from "@/lib/auth-client"
 import { useRouter } from "next/navigation"
+import Link from "next/link"
+import { toast } from "sonner"
 
 function ConversationSidebar({
   onSelect,
@@ -35,6 +37,11 @@ function ConversationSidebar({
   const handleDelete = (e: React.MouseEvent, id: string) => {
     e.stopPropagation()
     deleteConversation(id)
+  }
+
+  const handleLogout = async () => {
+    await signOut()
+    toast.success("已退出登录")
   }
 
   return (
@@ -76,7 +83,20 @@ function ConversationSidebar({
           ))
         )}
       </div>
-      <div className="p-3 border-t border-border" />
+      <div className="border-t border-border p-3 space-y-2">
+        <Link
+          href="/change-password"
+          className="block w-full text-left px-3 py-2 text-sm text-fg-muted hover:text-fg hover:bg-bg-muted rounded-md transition-colors"
+        >
+          修改密码
+        </Link>
+        <button
+          onClick={handleLogout}
+          className="w-full text-left px-3 py-2 text-sm text-fg-muted hover:text-destructive hover:bg-destructive/5 rounded-md transition-colors"
+        >
+          退出登录
+        </button>
+      </div>
     </div>
   )
 }
