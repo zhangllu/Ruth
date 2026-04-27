@@ -1,16 +1,42 @@
 import { KELLY_SYSTEM_PROMPT } from "@/lib/ai/kelly-prompt"
 import { auth } from "@/lib/auth"
+import { db } from "@/db"
+import { user } from "@/db/schema"
+import { eq, sql } from "drizzle-orm"
 
 interface ChatMessage {
   role: "system" | "user" | "assistant"
   content: string
 }
 
+const FREE_TOTAL_TOKENS = 100000
+
 export async function POST(req: Request) {
   try {
     const session = await auth.api.getSession({ headers: req.headers })
     if (!session) {
       return Response.json({ error: "未登录" }, { status: 401 })
+    }
+
+    // 检查 token 配额
+    const [userRecord] = await db
+      .select({ usedTokens: user.usedTokens, totalTokens: user.totalTokens })
+      .from(user)
+      .where(eq(user.id, session.user.id))
+
+    if (!userRecord) {
+      return Response.json({ error: "用户不存在" }, { status: 404 })
+    }
+
+    const totalTokens = userRecord.totalTokens ?? FREE_TOTAL_TOKENS
+    const usedTokens = userRecord.usedTokens ?? 0
+    const remaining = totalTokens - usedTokens
+
+    if (remaining <= 0) {
+      return Response.json(
+        { error: "对话配额已用完，请联系管理员" },
+        { status: 403 }
+      )
     }
 
     const { message, conversationHistory = [] } = await req.json()
@@ -39,7 +65,7 @@ export async function POST(req: Request) {
           ...conversationHistory,
           { role: "user", content: message },
         ] satisfies ChatMessage[],
-        max_tokens: 2000,
+        max_tokens: Math.min(2000, remaining),
         stream: true,
         thinking: { type: "disabled" },
       }),
@@ -54,11 +80,12 @@ export async function POST(req: Request) {
       )
     }
 
-    // 将智谱的 SSE 流转换为前端可读的流
+    // 将智谱的 SSE 流转换为前端可读的流，同时捕获 usage
     const stream = new ReadableStream({
       async start(controller) {
         const reader = response.body!.getReader()
         const decoder = new TextDecoder()
+        let totalTokensThisTurn = 0
 
         try {
           while (true) {
@@ -77,6 +104,11 @@ export async function POST(req: Request) {
                 const parsed = JSON.parse(data)
                 const delta = parsed.choices?.[0]?.delta
 
+                // 捕获 usage 信息（通常在最后一个 chunk 中）
+                if (parsed.usage?.total_tokens) {
+                  totalTokensThisTurn = parsed.usage.total_tokens
+                }
+
                 if (delta?.content) {
                   controller.enqueue(
                     new TextEncoder().encode(
@@ -93,6 +125,18 @@ export async function POST(req: Request) {
           console.error("流读取错误:", err)
         } finally {
           controller.close()
+
+          // 更新用户的 token 使用量
+          if (totalTokensThisTurn > 0) {
+            try {
+              await db
+                .update(user)
+                .set({ usedTokens: sql`${user.usedTokens} + ${totalTokensThisTurn}` })
+                .where(eq(user.id, session.user.id))
+            } catch (err) {
+              console.error("更新 token 用量失败:", err)
+            }
+          }
         }
       },
     })

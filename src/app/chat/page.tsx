@@ -17,9 +17,13 @@ import { toast } from "sonner"
 function ConversationSidebar({
   onSelect,
   onClose,
+  usedTokens = 0,
+  totalTokens = 100000,
 }: {
   onSelect: () => void
   onClose: () => void
+  usedTokens?: number
+  totalTokens?: number
 }) {
   const { conversations, currentConversationId, createConversation, setCurrentConversation, deleteConversation } =
     useChatStore()
@@ -84,6 +88,18 @@ function ConversationSidebar({
         )}
       </div>
       <div className="border-t border-border p-3 space-y-2">
+        <div className="px-3 py-1.5">
+          <div className="flex items-center justify-between text-xs text-fg-muted mb-1">
+            <span>剩余配额</span>
+            <span>{Math.max(0, totalTokens - usedTokens).toLocaleString()} / {totalTokens.toLocaleString()}</span>
+          </div>
+          <div className="w-full h-1.5 bg-bg-muted rounded-full overflow-hidden">
+            <div
+              className="h-full bg-primary-400 rounded-full transition-all"
+              style={{ width: `${Math.min(100, (usedTokens / totalTokens) * 100)}%` }}
+            />
+          </div>
+        </div>
         <Link
           href="/change-password"
           className="block w-full text-left px-3 py-2 text-sm text-fg-muted hover:text-fg hover:bg-bg-muted rounded-md transition-colors"
@@ -133,6 +149,8 @@ export default function ChatPage() {
             <ConversationSidebar
               onSelect={() => {}}
               onClose={() => {}}
+              usedTokens={(session.user as Record<string, unknown>).usedTokens as number}
+              totalTokens={(session.user as Record<string, unknown>).totalTokens as number}
             />
           </aside>
 
@@ -160,6 +178,8 @@ export default function ChatPage() {
               <ConversationSidebar
                 onSelect={() => setSidebarOpen(false)}
                 onClose={() => setSidebarOpen(false)}
+                usedTokens={(session.user as Record<string, unknown>).usedTokens as number}
+                totalTokens={(session.user as Record<string, unknown>).totalTokens as number}
               />
             </SheetContent>
           </Sheet>

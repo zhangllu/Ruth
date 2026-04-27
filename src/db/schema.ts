@@ -1,4 +1,4 @@
-import { pgTable, text, timestamp, boolean } from "drizzle-orm/pg-core"
+import { pgTable, text, timestamp, boolean, integer } from "drizzle-orm/pg-core"
 
 export const user = pgTable("user", {
   id: text("id").primaryKey(),
@@ -9,6 +9,8 @@ export const user = pgTable("user", {
   createdAt: timestamp("created_at").notNull(),
   updatedAt: timestamp("updated_at").notNull(),
   role: text("role").default("user").notNull(),
+  usedTokens: integer("used_tokens").default(0).notNull(),
+  totalTokens: integer("total_tokens").default(100000).notNull(),
 })
 
 export const session = pgTable("session", {

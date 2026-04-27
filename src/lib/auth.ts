@@ -14,6 +14,18 @@ export const auth = betterAuth({
     enabled: true,
     autoSignIn: true,
   },
+  user: {
+    additionalFields: {
+      usedTokens: {
+        type: "number",
+        defaultValue: 0,
+      },
+      totalTokens: {
+        type: "number",
+        defaultValue: 100000,
+      },
+    },
+  },
   plugins: [
     emailOTP({
       sendVerificationOTP: async ({ email, otp, type }) => {
