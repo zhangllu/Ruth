@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 import { nanoid } from "nanoid"
+import { auth } from "@/lib/auth"
 
 // 内存存储（Vercel 实例级别，重启后丢失，但对分享场景足够）
 const store = new Map<string, { messages: { role: string; content: string }[]; createdAt: number }>()
@@ -9,6 +10,11 @@ const TTL = 7 * 24 * 60 * 60 * 1000
 
 export async function POST(req: NextRequest) {
   try {
+    const session = await auth.api.getSession({ headers: req.headers })
+    if (!session) {
+      return NextResponse.json({ error: "未登录" }, { status: 401 })
+    }
+
     const body = await req.json()
     const { messages } = body
 

@@ -1,4 +1,5 @@
 import { KELLY_SYSTEM_PROMPT } from "@/lib/ai/kelly-prompt"
+import { auth } from "@/lib/auth"
 
 interface ChatMessage {
   role: "system" | "user" | "assistant"
@@ -7,6 +8,11 @@ interface ChatMessage {
 
 export async function POST(req: Request) {
   try {
+    const session = await auth.api.getSession({ headers: req.headers })
+    if (!session) {
+      return Response.json({ error: "未登录" }, { status: 401 })
+    }
+
     const { message, conversationHistory = [] } = await req.json()
 
     const apiKey = process.env.ZHIPU_API_KEY

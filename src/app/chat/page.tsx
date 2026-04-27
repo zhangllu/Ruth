@@ -8,7 +8,9 @@ import { Sidebar, MessageSquarePlus, Trash2 } from "lucide-react"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { Header } from "@/components/layout/header"
 import { Footer } from "@/components/layout/footer"
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import { useSession } from "@/lib/auth-client"
+import { useRouter } from "next/navigation"
 
 function ConversationSidebar({
   onSelect,
@@ -81,6 +83,24 @@ function ConversationSidebar({
 
 export default function ChatPage() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const { data: session, isPending } = useSession()
+  const router = useRouter()
+
+  useEffect(() => {
+    if (!isPending && !session) {
+      router.replace("/login")
+    }
+  }, [session, isPending, router])
+
+  if (isPending) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-bg">
+        <div className="text-sm text-fg-muted">加载中…</div>
+      </div>
+    )
+  }
+
+  if (!session) return null
 
   return (
     <div className="flex flex-col h-screen">
