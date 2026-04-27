@@ -19,11 +19,13 @@ function ConversationSidebar({
   onClose,
   usedTokens = 0,
   totalTokens = 100000,
+  isAdmin = false,
 }: {
   onSelect: () => void
   onClose: () => void
   usedTokens?: number
   totalTokens?: number
+  isAdmin?: boolean
 }) {
   const { conversations, currentConversationId, createConversation, setCurrentConversation, deleteConversation } =
     useChatStore()
@@ -100,6 +102,14 @@ function ConversationSidebar({
             />
           </div>
         </div>
+        {isAdmin && (
+          <Link
+            href="/admin"
+            className="block w-full text-left px-3 py-2 text-sm text-fg-muted hover:text-fg hover:bg-bg-muted rounded-md transition-colors"
+          >
+            管理后台
+          </Link>
+        )}
         <Link
           href="/change-password"
           className="block w-full text-left px-3 py-2 text-sm text-fg-muted hover:text-fg hover:bg-bg-muted rounded-md transition-colors"
@@ -160,6 +170,7 @@ export default function ChatPage() {
               onClose={() => {}}
               usedTokens={(session.user as Record<string, unknown>).usedTokens as number}
               totalTokens={(session.user as Record<string, unknown>).totalTokens as number}
+              isAdmin={(session.user as Record<string, unknown>).role === "admin"}
             />
           </aside>
 
@@ -189,6 +200,7 @@ export default function ChatPage() {
                 onClose={() => setSidebarOpen(false)}
                 usedTokens={(session.user as Record<string, unknown>).usedTokens as number}
                 totalTokens={(session.user as Record<string, unknown>).totalTokens as number}
+                isAdmin={(session.user as Record<string, unknown>).role === "admin"}
               />
             </SheetContent>
           </Sheet>
