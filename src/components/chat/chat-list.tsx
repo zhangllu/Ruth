@@ -3,7 +3,7 @@
 import { useRef, useEffect, useState, useCallback } from "react"
 import { useChatStore } from "@/lib/stores/chat-store"
 import { ChatMessage } from "./chat-message"
-import { Share2, X } from "lucide-react"
+import { Share2, X, CheckSquare } from "lucide-react"
 import { toast } from "sonner"
 import { shareMessages, buildShareUrl } from "@/lib/share-utils"
 
@@ -57,6 +57,14 @@ export function ChatList() {
   }, [currentConv, selectedIds, clearSelection])
 
   const hasSelection = selectedIds.size > 0
+  const allSelected = currentConv
+    ? selectedIds.size === currentConv.messages.filter((m) => m.role !== "system").length
+    : false
+
+  const selectAll = useCallback(() => {
+    if (!currentConv) return
+    setSelectedIds(new Set(currentConv.messages.filter((m) => m.role !== "system").map((m) => m.id)))
+  }, [currentConv])
 
   if (!currentConv || currentConv.messages.length === 0) {
     return (
@@ -178,6 +186,15 @@ export function ChatList() {
               已选择 <span className="font-medium text-fg">{selectedIds.size}</span> 条
             </span>
             <div className="w-px h-4 bg-border" />
+            {!allSelected && (
+              <button
+                onClick={selectAll}
+                className="flex items-center gap-1.5 text-sm text-fg-muted hover:text-fg transition-colors"
+              >
+                <CheckSquare className="w-4 h-4" />
+                全选
+              </button>
+            )}
             <button
               onClick={handleShare}
               className="flex items-center gap-1.5 text-sm text-primary-600 hover:text-primary-700 transition-colors"
