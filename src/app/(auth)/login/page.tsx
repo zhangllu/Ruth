@@ -6,10 +6,10 @@ import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { toast } from "sonner"
 
-type LoginMode = "password" | "otp"
+type LoginMode = "otp" | "password"
 
 export default function LoginPage() {
-  const [mode, setMode] = useState<LoginMode>("password")
+  const [mode, setMode] = useState<LoginMode>("otp")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [otp, setOtp] = useState("")
@@ -100,7 +100,7 @@ export default function LoginPage() {
     router.push("/chat")
   }
 
-  const switchMode = (m: LoginMode) => {
+  const switchTo = (m: LoginMode) => {
     setMode(m)
     setOtp("")
     setOtpSent(false)
@@ -120,59 +120,7 @@ export default function LoginPage() {
           <p className="text-sm text-fg-muted mt-1">登录后对话将保存在你的账户中</p>
         </div>
 
-        {/* 登录方式切换 */}
-        <div className="flex rounded-xl border border-border p-1 mb-6">
-          <button
-            type="button"
-            onClick={() => switchMode("password")}
-            className={`flex-1 py-2 text-sm rounded-lg transition-colors ${
-              mode === "password"
-                ? "bg-primary-600 text-white font-medium"
-                : "text-fg-muted hover:text-fg"
-            }`}
-          >
-            密码登录
-          </button>
-          <button
-            type="button"
-            onClick={() => switchMode("otp")}
-            className={`flex-1 py-2 text-sm rounded-lg transition-colors ${
-              mode === "otp"
-                ? "bg-primary-600 text-white font-medium"
-                : "text-fg-muted hover:text-fg"
-            }`}
-          >
-            验证码登录
-          </button>
-        </div>
-
-        {mode === "password" ? (
-          <form onSubmit={handlePasswordLogin} className="flex flex-col gap-4">
-            <input
-              type="email"
-              placeholder="邮箱"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="rounded-xl border border-border bg-bg px-4 py-2.5 text-sm text-fg placeholder:text-fg-muted/50 outline-none focus:border-primary-300 focus:ring-1 focus:ring-primary-200 transition-colors"
-            />
-            <input
-              type="password"
-              placeholder="密码"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              className="rounded-xl border border-border bg-bg px-4 py-2.5 text-sm text-fg placeholder:text-fg-muted/50 outline-none focus:border-primary-300 focus:ring-1 focus:ring-primary-200 transition-colors"
-            />
-            <button
-              type="submit"
-              disabled={loading}
-              className="rounded-xl bg-primary-600 text-white py-2.5 text-sm font-medium hover:bg-primary-700 disabled:opacity-50 transition-colors"
-            >
-              {loading ? "登录中…" : "登录"}
-            </button>
-          </form>
-        ) : (
+        {mode === "otp" ? (
           <form onSubmit={handleOtpLogin} className="flex flex-col gap-4">
             <input
               type="email"
@@ -224,14 +172,48 @@ export default function LoginPage() {
               </div>
             )}
           </form>
+        ) : (
+          <form onSubmit={handlePasswordLogin} className="flex flex-col gap-4">
+            <input
+              type="email"
+              placeholder="邮箱"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              className="rounded-xl border border-border bg-bg px-4 py-2.5 text-sm text-fg placeholder:text-fg-muted/50 outline-none focus:border-primary-300 focus:ring-1 focus:ring-primary-200 transition-colors"
+            />
+            <input
+              type="password"
+              placeholder="密码"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              className="rounded-xl border border-border bg-bg px-4 py-2.5 text-sm text-fg placeholder:text-fg-muted/50 outline-none focus:border-primary-300 focus:ring-1 focus:ring-primary-200 transition-colors"
+            />
+            <button
+              type="submit"
+              disabled={loading}
+              className="rounded-xl bg-primary-600 text-white py-2.5 text-sm font-medium hover:bg-primary-700 disabled:opacity-50 transition-colors"
+            >
+              {loading ? "登录中…" : "登录"}
+            </button>
+          </form>
         )}
 
-        <p className="text-center text-sm text-fg-muted mt-6">
-          还没有账号？{" "}
-          <Link href="/register" className="text-primary-600 hover:text-primary-700">
-            注册
+        {/* 底部链接区 */}
+        <div className="mt-6 flex items-center justify-center gap-4 text-sm text-fg-muted">
+          <button
+            type="button"
+            onClick={() => switchTo(mode === "otp" ? "password" : "otp")}
+            className="hover:text-primary-600 transition-colors"
+          >
+            {mode === "otp" ? "使用密码登录" : "使用验证码登录"}
+          </button>
+          <span className="text-border">|</span>
+          <Link href="/register" className="hover:text-primary-600 transition-colors">
+            没有账号？注册
           </Link>
-        </p>
+        </div>
       </div>
     </div>
   )
